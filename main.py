@@ -1,29 +1,10 @@
-from fastapi import FastAPI, Path, Query, HTTPException, Depends
-from typing import Optional, Annotated, List, Sequence
-from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, EmailStr
+from fastapi import FastAPI, Query, Depends
+from typing import Optional, Annotated, List, Sequence, Type, TypeVar
 from sqlmodel import Field, Session, SQLModel, create_engine, select, Relationship
 from datetime import datetime, date
 import uuid
 
 
-#
-# class User(SQLModel, table=True):
-#     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
-#     email: EmailStr
-#     first_name: str = Field(index=True)
-#     last_name: str
-#     secret_name: str
-#     phone_number: Optional[str]
-#     created_at: datetime = Field(default_factory=lambda: datetime.now())
-#     updated_at: datetime = Field(default_factory=lambda: datetime.now())
-#
-# class Equipment(SQLModel, table=True):
-#     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
-#     name: str
-#     category_id: Optional[]
-#
-#
 class User(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     email: str = Field(unique=True, index=True)
@@ -41,28 +22,17 @@ class User(SQLModel, table=True):
 
 
 class UserCreate(SQLModel):
-    id: Optional[uuid.UUID] = None
     email: str
     password_hash: str
     first_name: str
     last_name: str
     phone_number: Optional[str] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
 
     @classmethod
     def from_request(cls, data: dict):
-        """Convert string fields to the correct types"""
-        return cls(
-            id=uuid.UUID(data["id"]) if "id" in data and data["id"] else uuid.uuid4(),
-            email=data["email"],
-            password_hash=data["password_hash"],
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            phone_number=data.get("phone_number"),
-            created_at=datetime.now(),
-            updated_at=datetime.now(),
-        )
+        return cls(**data)
 
 
 class Category(SQLModel, table=True):
@@ -109,6 +79,7 @@ class EquipmentCreate(SQLModel):
     name: str
     category_id: uuid.UUID
     description: Optional[str] = None
+    price_per_day: float
     available_quantity: int
     location: str
     created_at: Optional[datetime] = None
@@ -123,6 +94,7 @@ class EquipmentCreate(SQLModel):
             category_id=data["category_id"],
             description=data["description"],
             available_quantity=data["available_quantity"],
+            price_per_day=data["price_per_day"],
             location=data["location"],
             created_at=datetime.now(),
             updated_at=datetime.now(),
@@ -224,6 +196,23 @@ def get_session():
         yield session
 
 
+T = TypeVar("T", bound=SQLModel)
+
+
+async def create_resource(
+        model: Type[T],
+        create_model: Type[T],
+        data: dict,
+        session: Session
+) -> T:
+    obj = create_model.from_request(data)
+    resource = model(**obj.dict())
+    session.add(resource)
+    session.commit()
+    session.refresh(resource)
+    return resource
+
+
 SessionDep = Annotated[Session, Depends(get_session)]
 
 app = FastAPI()
@@ -250,7 +239,7 @@ def get_equipment(
         offset: int = 0,
         limit: Annotated[int, Query(le=100)] = 100,
         name: Optional[str] = None,
-        category_id: Optional[uuid.UUID] = None,
+        # category_id: Optional[uuid.UUID] = None,
         min_price: Optional[float] = None,
         max_price: Optional[float] = None,
         location: Optional[str] = None,
@@ -262,17 +251,17 @@ def get_equipment(
     # FILTROWANIE
     if name:
         query = query.where(Equipment.name.ilike(f"%{name}%"))  # Wyszukiwanie po nazwie (case-insensitive)
-    if category_id:
-        query = query.where(Equipment.category_id == category_id)
+    # if category_id:
+    #     query = query.where(Equipment.category_id == category_id)
     if min_price is not None:
         query = query.where(Equipment.price_per_day >= min_price)
     if max_price is not None:
         query = query.where(Equipment.price_per_day <= max_price)
     if location:
-        query = query.where(Equipment.location.ilike(f"%{location}%"))  # Wyszukiwanie po lokalizacji
+        query = query.where(Equipment.location.ilike(f"%{location}%"))
 
     # SORTOWANIE
-    sort_column = getattr(Equipment, sort_by, Equipment.created_at)  # Domyślnie sortujemy po `created_at`
+    sort_column = getattr(Equipment, sort_by, Equipment.created_at)
     if sort_order.lower() == "desc":
         query = query.order_by(sort_column.desc())
     else:
@@ -283,25 +272,6 @@ def get_equipment(
     return equipment
 
 
-@app.post("/users")
-async def create_user(user_data: dict, session: SessionDep) -> User:
-    user_obj = UserCreate.from_request(user_data)
-    user = User(**user_obj.dict())
-    session.add(user)
-    session.commit()
-    session.refresh(user)
-    return user
-
-
-@app.post("/equipment")
-async def create_equipment(eq_data: dict, session: SessionDep) -> Equipment:
-    eq = Equipment(**eq_data)
-    session.add(eq)
-    session.commit()
-    session.refresh(eq)
-    return eq
-
-
 @app.get("/category")
 def get_category(
         session: SessionDep
@@ -310,11 +280,16 @@ def get_category(
     return categories
 
 
+@app.post("/users")
+async def create_user(user_data: dict, session: SessionDep) -> User:
+    return await create_resource(User, UserCreate, user_data, session)
+
+
+@app.post("/equipment")
+async def create_equipment(eq_data: dict, session: SessionDep) -> Equipment:
+    return await create_resource(Equipment, EquipmentCreate, eq_data, session)
+
+
 @app.post("/category")
 async def create_category(cat_data: dict, session: SessionDep) -> Category:
-    cat_obj = CategoryCreate.from_request(cat_data)
-    category = Category(**cat_obj.dict())
-    session.add(category)
-    session.commit()
-    session.refresh(category)
-    return category
+    return await create_resource(Category, CategoryCreate, cat_data, session)
