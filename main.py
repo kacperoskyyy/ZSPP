@@ -60,8 +60,8 @@ class UserCreate(SQLModel):
             first_name=data["first_name"],
             last_name=data["last_name"],
             phone_number=data.get("phone_number"),
-            created_at=datetime.fromisoformat(data["created_at"]) if "created_at" in data else datetime.now(),
-            updated_at=datetime.fromisoformat(data["updated_at"]) if "updated_at" in data else datetime.now(),
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
         )
 
 
@@ -104,31 +104,30 @@ class Equipment(SQLModel, table=True):
     reviews: List["Review"] = Relationship(back_populates="equipment")
 
 
-# class EquipmentCreate(SQLModel):
-#     id: Optional[uuid.UUID] = None
-#     name: str
-#     category_id: str
-#     description: Optional[str] = None
-#     available_quantity: int
-#     location: str
-#     phone_number: Optional[str] = None
-#     created_at: Optional[datetime] = None
-#     updated_at: Optional[datetime] = None
-#
-#     @classmethod
-#     def from_request(cls, data: dict):
-#         """Convert string fields to the correct types"""
-#         return cls(
-#             id=uuid.UUID(data["id"]) if "id" in data and data["id"] else uuid.uuid4(),
-#             email=data["email"],
-#             password_hash=data["password_hash"],
-#             first_name=data["first_name"],
-#             last_name=data["last_name"],
-#             phone_number=data.get("phone_number"),
-#             created_at=datetime.fromisoformat(data["created_at"]) if "created_at" in data else datetime.now(),
-#             updated_at=datetime.fromisoformat(data["updated_at"]) if "updated_at" in data else datetime.now(),
-#         )
-#
+class EquipmentCreate(SQLModel):
+    id: Optional[uuid.UUID] = None
+    name: str
+    category_id: uuid.UUID
+    description: Optional[str] = None
+    available_quantity: int
+    location: str
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+    @classmethod
+    def from_request(cls, data: dict):
+        """Convert string fields to the correct types"""
+        return cls(
+            id=uuid.UUID(data["id"]) if "id" in data and data["id"] else uuid.uuid4(),
+            name=data["name"],
+            category_id=data["category_id"],
+            description=data["description"],
+            available_quantity=data["available_quantity"],
+            location=data["location"],
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
+        )
+
 
 class Reservation(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
