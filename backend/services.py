@@ -1,24 +1,36 @@
 import passlib.hash as _hash
 import sqlalchemy.orm as _orm
-import database as _database, models as _models, schemas as _schemas
-import jwt as _jwt
-import fastapi as _fastapi
-import fastapi.security as _security
+import database as _database
+import models as _models
+import schemas as _schemas
 import datetime as _dt
-from dotenv import load_dotenv
-import os as _os
 
-oauth2schema = _security.OAuth2PasswordBearer(tokenUrl="/api/token")
-
-load_dotenv()
-
-JWT_SECRET = _os.getenv("JWT_SECRET")
-
-
+# --- Inicjalizacja bazy danych z konsoli (py import services services.create_database())---
 def create_database():
-    return _database.Base.metadata.create_all(bind=_database.engine)
+    _database.Base.metadata.create_all(bind=_database.engine)
+
+    db = _database.SessionLocal()
+
+    try:
+        existing_admin = db.query(_models.User).filter(_models.User.email == "admin@admin.com").first()
+        if not existing_admin:
+            admin_data = _models.User(
+                first_name="Admin",
+                last_name="User",
+                phone_number="123456789",
+                email="admin@admin.com",
+                password_hash=_hash.bcrypt.hash("admin"),
+                role="admin",
+            )
+            db.add(admin_data)
+            db.commit()
+            db.refresh(admin_data)
+
+    finally:
+        db.close()
 
 
+# --- Generator sesji bazy danych ---
 def get_db():
     db = _database.SessionLocal()
     try:
@@ -27,11 +39,25 @@ def get_db():
         db.close()
 
 
-async def get_user_by_email(email: str, db: _orm.Session):
+# --- Pobieranie użytkownika po emailu ---
+def get_user_by_email(email: str, db: _orm.Session):
     return db.query(_models.User).filter(_models.User.email == email).first()
 
 
-async def create_user(user: _schemas.UserCreate, db: _orm.Session):
+# --- Zmiana roli użytkownika ---
+def change_role(email: str, role: str, db: _orm.Session):
+    user_db = db.query(_models.User).filter(_models.User.email == email).first()
+
+    if user_db:
+        user_db.role = role
+        user_db.updated_at = _dt.datetime.now()
+
+        db.commit()
+        db.refresh(user_db)
+
+
+# --- Tworzenie nowego użytkownika ---
+def create_user(user: _schemas.UserCreate, db: _orm.Session):
     user_obj = _models.User(
         first_name=user.first_name,
         last_name=user.last_name,
@@ -45,24 +71,7 @@ async def create_user(user: _schemas.UserCreate, db: _orm.Session):
     return user_obj
 
 
-async def get_users(db: _orm.Session):
+# --- Pobieranie listy użytkowników ---
+def get_users(db: _orm.Session):
     users = db.query(_models.User).all()
     return [_schemas.UserRead.model_validate(user) for user in users]
-
-
-# Funkcja automatyzujaca dodawanie i odswiezanie zerknac pozniej na to
-# T = TypeVar("T", bound=SQLModel)
-
-
-# async def create_resource(
-#         model: Type[T],
-#         create_model: Type[T],
-#         data: dict,
-#         session: Session
-# ) -> T:
-#     obj = create_model.from_request(data)
-#     resource = model(**obj.dict())
-#     session.add(resource)
-#     session.commit()
-#     session.refresh(resource)
-#     return resource
