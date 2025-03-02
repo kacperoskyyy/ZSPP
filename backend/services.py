@@ -40,12 +40,12 @@ def get_db():
 
 
 # --- Pobieranie użytkownika po emailu ---
-def get_user_by_email(email: str, db: _orm.Session):
+async def get_user_by_email(email: str, db: _orm.Session):
     return db.query(_models.User).filter(_models.User.email == email).first()
 
 
 # --- Zmiana roli użytkownika ---
-def change_role(email: str, role: str, db: _orm.Session):
+async def change_role(email: str, role: str, db: _orm.Session):
     user_db = db.query(_models.User).filter(_models.User.email == email).first()
 
     if user_db:
@@ -57,7 +57,7 @@ def change_role(email: str, role: str, db: _orm.Session):
 
 
 # --- Tworzenie nowego użytkownika ---
-def create_user(user: _schemas.UserCreate, db: _orm.Session):
+async def create_user(user: _schemas.UserCreate, db: _orm.Session):
     user_obj = _models.User(
         first_name=user.first_name,
         last_name=user.last_name,
@@ -72,6 +72,6 @@ def create_user(user: _schemas.UserCreate, db: _orm.Session):
 
 
 # --- Pobieranie listy użytkowników ---
-def get_users(db: _orm.Session):
+async def get_users(db: _orm.Session):
     users = db.query(_models.User).all()
     return [_schemas.UserRead.model_validate(user) for user in users]
