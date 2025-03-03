@@ -1,0 +1,63 @@
+.App {
+  text-align: center;
+}
+.App-Navigation {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 20px;
+}
+.App-Title {
+  display: flex;
+  justify-content: left;
+  padding:0px 15px;
+}
+.App-Nav {
+  display: flex;
+  justify-content: end;
+  gap: 30px;
+  margin-right: 15px;
+  font-size: large;
+  padding: 0px 5px;
+}
+
+.App-logo {
+  display: block;
+  pointer-events: none;
+  float: center;
+}
+.App-Greet
+{
+  display: block;
+  float:left;
+  font-size: 32px;
+  
+}
+
+.App-header {
+  background-color: #0088FF;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap:20px;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  
+}
+
+.App-link {
+  
+  background-color: black;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
