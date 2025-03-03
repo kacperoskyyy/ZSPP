@@ -20,9 +20,7 @@ async def login(
 ):
     user = await _services.get_user_by_email(form_data.username, db)
 
-    if not user or not _models.User.verify_password(user,
-        form_data.password
-    ):
+    if not user or not _models.User.verify_password(user, form_data.password):
         raise _fastapi.HTTPException(status_code=400, detail="Invalid credentials")
 
     token = _auth.create_access_token(data={"sub": str(user.id)})

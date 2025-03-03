@@ -25,14 +25,18 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 # --- Generowanie tokena JWT ---
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
-    expire = datetime.now() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.now() + (
+        expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
     to_encode.update({"exp": expire})
 
     return _jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 # --- Pobieranie aktualnego użytkownika ---
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(_services.get_db)):
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(_services.get_db)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid credentials",
@@ -52,13 +56,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise credentials_exception
 
     return user
-
-
-# # --- Sprawdzanie czy użytkownik jest zalogowany ---
-# def get_current_active_user(current_user: _models.User = Depends(get_current_user)):
-#     if not current_user:
-#         raise HTTPException(status_code=400, detail="User not found")
-#     return current_user
 
 
 # --- Sprawdzanie czy użytkownik jest adminem ---

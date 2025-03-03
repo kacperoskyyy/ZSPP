@@ -5,6 +5,7 @@ import models as _models
 import schemas as _schemas
 import datetime as _dt
 
+
 # --- Inicjalizacja bazy danych z konsoli (py import services services.create_database())---
 def create_database():
     _database.Base.metadata.create_all(bind=_database.engine)
@@ -12,7 +13,11 @@ def create_database():
     db = _database.SessionLocal()
 
     try:
-        existing_admin = db.query(_models.User).filter(_models.User.email == "admin@admin.com").first()
+        existing_admin = (
+            db.query(_models.User)
+            .filter(_models.User.email == "admin@admin.com")
+            .first()
+        )
         if not existing_admin:
             admin_data = _models.User(
                 first_name="Admin",
@@ -75,4 +80,3 @@ async def create_user(user: _schemas.UserCreate, db: _orm.Session):
 async def get_users(db: _orm.Session):
     users = db.query(_models.User).all()
     return [_schemas.UserRead.model_validate(user) for user in users]
-
