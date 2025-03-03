@@ -19,7 +19,7 @@ ALGORITHM = _os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(_os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
 # Konfiguracja OAuth2
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
 
 # --- Generowanie tokena JWT ---
@@ -54,15 +54,15 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 
-# --- Sprawdzanie czy użytkownik jest zalogowany ---
-def get_current_active_user(current_user: _models.User = Depends(get_current_user)):
-    if not current_user:
-        raise HTTPException(status_code=400, detail="User not found")
-    return current_user
+# # --- Sprawdzanie czy użytkownik jest zalogowany ---
+# def get_current_active_user(current_user: _models.User = Depends(get_current_user)):
+#     if not current_user:
+#         raise HTTPException(status_code=400, detail="User not found")
+#     return current_user
 
 
 # --- Sprawdzanie czy użytkownik jest adminem ---
-def get_admin_user(current_user: _models.User = Depends(get_current_active_user)):
+def get_admin_user(current_user: _models.User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="You don't have enough permissions")
     return current_user

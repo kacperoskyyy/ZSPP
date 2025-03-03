@@ -75,3 +75,4 @@ async def create_user(user: _schemas.UserCreate, db: _orm.Session):
 async def get_users(db: _orm.Session):
     users = db.query(_models.User).all()
     return [_schemas.UserRead.model_validate(user) for user in users]
+
