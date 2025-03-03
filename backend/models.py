@@ -5,6 +5,8 @@ import passlib.hash as _hash
 
 import database as _database
 
+# Podstawowy użytkownik posiada (email:admin@admin.com, hasło:admin)
+
 
 # Co posiadamy w bazie danych za tabele (wzór tabel)
 
