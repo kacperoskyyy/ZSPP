@@ -16,7 +16,7 @@ function App() {
 
       <header className="App-header">
         <div className="App-Greet">
-          <p>Znajdź idealny sprzęt sportowy na każdą okazje.</p>
+          <p>Znajdź idealny sprzęt sportowy na każdy moment.</p>
           <p>Przeglądaj oferte</p>
         </div>
         <div>
