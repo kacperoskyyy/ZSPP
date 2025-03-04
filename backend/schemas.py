@@ -57,6 +57,23 @@ class ReservationRead(_ReservationBase):
         from_attributes = True
 
 
+# Podstawowa klasa wyposażenia
+class _EquipmentBase(_pydantic.BaseModel):
+    name: str
+    category_id: int
+    description: str
+    price_per_day: float
+    available_quantity: int
+
+
+class EquipmentCreate(_EquipmentBase):
+    pass
+
+class EquipmentRead(_EquipmentBase):
+    id: int
+    
+
+
 # Podstawowa klasa płatności
 class _PaymentBase(_pydantic.BaseModel):
     reservation_id: int

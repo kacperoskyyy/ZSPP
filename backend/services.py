@@ -80,3 +80,67 @@ async def create_user(user: _schemas.UserCreate, db: _orm.Session):
 async def get_users(db: _orm.Session):
     users = db.query(_models.User).all()
     return [_schemas.UserRead.model_validate(user) for user in users]
+
+
+# --- Usuwanie użytkownika ---
+async def delete_user(user_id: int, db: _orm.Session):
+    user = db.query(_models.User).filter(_models.User.id == user_id).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        return True
+    return False
+
+
+# --- Aktualizacja użytkownika ---
+async def update_user(user_id: int, user_update: _schemas.UserCreate, db: _orm.Session):
+    user = db.query(_models.User).filter(_models.User.id == user_id).first()
+    if user:
+        user.first_name = user_update.first_name
+        user.last_name = user_update.last_name
+        user.phone_number = user_update.phone_number
+        user.email = user_update.email
+        user.updated_at = _dt.datetime.now()
+        db.commit()
+        db.refresh(user)
+        return user
+    return None
+
+
+# --- Tworzenie rezerwacji ---
+async def create_reservation(
+    reservation: _schemas.ReservationCreate, user_id: int, db: _orm.Session
+):
+    reservation_obj = _models.Reservation(
+        user_id=user_id,
+        start_date=reservation.start_date,
+        end_date=reservation.end_date,
+        status="pending",
+    )
+    db.add(reservation_obj)
+    db.commit()
+    db.refresh(reservation_obj)
+    return reservation_obj
+
+
+# --- Pobieranie konkretnej rezerwacji ---
+async def get_reservation(reservation_id: int, db: _orm.Session):
+    return (
+        db.query(_models.Reservation)
+        .filter(_models.Reservation.id == reservation_id)
+        .first()
+    )
+
+
+# --- Pobieranie wszystkich rezerwacji użytkownika ---
+async def get_user_reservations(user_id: int, db: _orm.Session):
+    return (
+        db.query(_models.Reservation)
+        .filter(_models.Reservation.user_id == user_id)
+        .all()
+    )
+
+
+# --- Pobieranie wszystkich rezerwacji w systemie ---
+async def get_all_reservations(db: _orm.Session):
+    return db.query(_models.Reservation).all()
