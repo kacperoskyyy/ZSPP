@@ -27,6 +27,55 @@ function App() {
                     <img className="App-logo" src="/Biegacz1.png" alt="Opis obrazka" />
                 </div>
             </header>
+            <div className="App-Page2">
+                <div className="Navigation">
+                    <a href="#up">
+                        <img src="/arrow-up-solid.png" alt="Strzałka w górę"></img>
+                        <span>Przewiń w górę</span>
+                    </a>
+                </div>
+                <div className="App-Page2-Gallery">
+                    <img classname="App-Page2-Pict1" src="/Obraz1.jpg" alt="Obrazek1" />
+                    <img classname="App-Page2-Pict2" src="/Obraz2.jpg" alt="Obrazek2" />
+                    <img classname="App-Page2-Pict3" src="/Obraz3.jpg" alt="Obrazek3" />
+                    <img classname="App-Page2-Pict4" src="/Obraz4.jpg" alt="Obrazek4" />
+                    
+                </div>
+                <div className="Navigation">
+                    <a href="#bottom">
+                        <img src="/arrow-down-solid.png" alt="Strzałka w dół"></img>
+                        <span>Przewiń w dół</span>
+                    </a>
+                </div>              
+            </div>
+            <div className="App-Page3">
+                <div className="Navigation">
+                    <a href="#up">
+                        <img src="/arrow-up-solid.png" alt="Strzałka w górę"></img>
+                        <span>Przewiń w górę</span>
+                    </a>
+                </div>
+                <div className="App-Page3-Swipe">
+                    <div className="App-Page3-Swipe_Product">
+                        <img classname="App-Page3-Pict1" src="/Produkt1.jpg" alt="Obrazek1" />
+                        <p className="Caption">Futerał - 1000zł</p>
+                    </div>
+                    <div className="App-Page3-Swipe_Product">
+                        <img classname="App-Page3-Pict2" src="/Produkt2.jpg" alt="Obrazek1" />
+                        <p className="Caption">GPS - 500zł</p>
+                    </div>
+                    <div className="App-Page3-Swipe_Product">
+                        <img classname="App-Page3-Pict1" src="/Produkt3.jpg" alt="Obrazek1" />
+                        <p className="Caption">Rękawice - 1000zł</p>
+                    </div>   
+                </div>
+                <div className="Navigation">
+                    <a href="#bottom">
+                        <img src="/arrow-down-solid.png" alt="Strzałka w dół"></img>
+                        <span>Przewiń w dół</span>
+                    </a>
+                </div> 
+            </div>
         </div>
     );
 }
