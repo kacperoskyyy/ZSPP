@@ -105,3 +105,62 @@
         transform: rotate(360deg);
     }
 }
+.App-Page2 {
+    background: linear-gradient(to bottom, #cce3ff, #86b6f6);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+.App-Page2-Gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 1100px;
+}
+.App-Page2-Gallery img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+}
+.Navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+.Navigation a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.Navigation a img {
+    width: 30px;
+    height: auto;
+}
+.App-Page3 {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+.App-Page3-Swipe {
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:20px;
+    max-width:1200px;
+}
+.App-Page3-Swipe img {
+    width:100%;
+    height:auto;
+}
