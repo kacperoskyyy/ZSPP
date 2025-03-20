@@ -2,3 +2,4 @@
 *.pyc
 *.vsidx
 frontend/.vs/slnx.sqlite
+backend/.env
