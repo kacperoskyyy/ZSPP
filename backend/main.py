@@ -56,8 +56,6 @@ async def login(
     user = await _services.get_user_by_email(form_data.username, db)
     if not user or not user.verify_password(form_data.password):
         raise _fastapi.HTTPException(status_code=400, detail="Invalid credentials")
-    if user.is_locked:
-        raise _fastapi.HTTPException(status_code=403, detail="User account is locked.")
     token = _auth.create_access_token(data={"sub": str(user.id)})
     return {"access_token": token, "token_type": "bearer"}
 
