@@ -13,14 +13,14 @@ class UserBase(_pydantic.BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    plec: Optional[bool] = None
-    data_urodzenia: Optional[dt.date] = None
+    gender: Optional[bool] = None
+    birth_date: Optional[dt.date] = None
 
 
 class UserRead(UserBase):
     id: int
-    plec: Optional[str]
-    data_urodzenia: Optional[dt.date]
+    gender: Optional[str]
+    birth_date: Optional[dt.date]
     created_at: dt.datetime
     role: str
 

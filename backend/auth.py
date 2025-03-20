@@ -48,9 +48,6 @@ def get_current_user(
     if user is None:
         raise credentials_exception
 
-    if user.is_locked:
-        raise HTTPException(status_code=403, detail="User account is locked.")
-
     return user
 
 
