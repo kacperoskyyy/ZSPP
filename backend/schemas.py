@@ -1,113 +1,47 @@
-import datetime as _dt
-from typing import Optional
+import datetime as dt
+from typing import Optional, List
 import pydantic as _pydantic
 
 
-# Podstawa do dziedziczenia pozostałych pól
-class _UserBase(_pydantic.BaseModel):
+# --- USER ---
+class UserBase(_pydantic.BaseModel):
     email: str
     first_name: str
     last_name: str
     phone_number: Optional[str] = None
 
 
-# Do tworzenia użytkownika mamy hasło i pola z _UserBase
-class UserCreate(_UserBase):
-    hash_password: str
+class UserCreate(UserBase):
+    password: str
+    plec: Optional[bool] = None
+    data_urodzenia: Optional[dt.date] = None
 
 
-class UserRead(_UserBase):
+class UserRead(UserBase):
     id: int
-    created_at: _dt.datetime
+    plec: Optional[str]
+    data_urodzenia: Optional[dt.date]
+    created_at: dt.datetime
+    role: str
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 class UserUpdate(_pydantic.BaseModel):
-    id: int
     email: Optional[str] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     phone_number: Optional[str] = None
 
 
-class UserLogin(_pydantic.BaseModel):
-    email: str
-    password: str
-
-
-class _ReservationBase(_pydantic.BaseModel):
-    start_date: _dt.datetime
-    end_date: _dt.datetime
-    status: str  # "pending", "confirmed", "canceled", "completed"
-
-
-# Schemat dla tworzenia rezerwacji
-class ReservationCreate(_ReservationBase):
-    pass
-
-
-# Schemat do odczytu rezerwacji
-class ReservationRead(_ReservationBase):
-    id: int
-    user_id: int
-    created_at: _dt.datetime
-
-    class Config:
-        from_attributes = True
-
-
-# Podstawowa klasa płatności
-class _PaymentBase(_pydantic.BaseModel):
-    reservation_id: int
-    amount: float
-    payment_method: str  # "PayPal", "BLIK", "Visa"
-    status: str
-
-
-# Schemat dla tworzenia płatności
-class PaymentCreate(_PaymentBase):
-    pass
-
-
-# Schemat do odczytu płatności
-class PaymentRead(_PaymentBase):
-    id: int
-
-
-# Podstawowa klasa recenzji
-class _ReviewBase(_pydantic.BaseModel):
-    user_id: int
-    equipment_id: int
-    rating: int  # 1-5
-    comment: Optional[str] = None
-
-
-# Schemat dla tworzenia recenzji
-class ReviewCreate(_ReviewBase):
-    pass
-
-
-# Schemat do odczytu recenzji
-class ReviewRead(_ReviewBase):
-    id: int
-    created_at: _dt.datetime
-
-    class Config:
-        from_attributes = True
-
-
+# --- CATEGORY ---
 class CategoryBase(_pydantic.BaseModel):
     name: str
-    description: str | None = None
+    description: Optional[str] = None
 
 
 class CategoryCreate(CategoryBase):
-    pass
-
-
-class CategoryUpdate(CategoryBase):
     pass
 
 
@@ -115,56 +49,183 @@ class CategoryRead(CategoryBase):
     id: int
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
-class _EquipmentBase(_pydantic.BaseModel):
+# --- EQUIPMENT ---
+class EquipmentBase(_pydantic.BaseModel):
     name: str
-    description: str | None = None
+    description: Optional[str] = None
     category_id: int
     price_per_day: float
     available_quantity: int
 
 
-class EquipmentCreate(_EquipmentBase):
+class EquipmentCreate(EquipmentBase):
     pass
 
 
-class EquipmentRead(_EquipmentBase):
+class EquipmentRead(EquipmentBase):
     id: int
-    created_at: _dt.datetime
-    updated_at: _dt.datetime
+    created_at: dt.datetime
+    updated_at: dt.datetime
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
-class _SupportTicketBase(_pydantic.BaseModel):
-    user_id: int
-    issue_description: str
-    status: str
+# --- RESERVATION ---
+class ReservationBase(_pydantic.BaseModel):
+    start_date: dt.datetime
+    end_date: dt.datetime
+    status: Optional[str] = "pending"
 
 
-class SupportTicketCreate(_SupportTicketBase):
+class ReservationCreate(ReservationBase):
     pass
 
 
-class SupportTicketRead(_SupportTicketBase):
+class ReservationRead(ReservationBase):
+    id: int
+    user_id: int
+    created_at: dt.datetime
+
+    class Config:
+        orm_mode = True
+
+
+# --- SUPPORT TICKET ---
+class SupportTicketBase(_pydantic.BaseModel):
+    issue_description: str
+    status: Optional[str] = "open"
+
+
+class SupportTicketCreate(SupportTicketBase):
+    pass
+
+
+class SupportTicketRead(SupportTicketBase):
+    id: int
+    user_id: int
+
+    class Config:
+        orm_mode = True
+
+
+# --- EQUIPMENT TRANSPORT ---
+class EquipmentTransportBase(_pydantic.BaseModel):
+    reservation_id: int
+    current_location_id: int
+    destination_id: int
+
+
+class EquipmentTransportCreate(EquipmentTransportBase):
+    pass
+
+
+class EquipmentTransportRead(EquipmentTransportBase):
+    id: int
+    created_at: dt.datetime
+    updated_at: dt.datetime
+
+    class Config:
+        orm_mode = True
+
+
+# --- EQUIPMENT TRANSPORT ITEM ---
+class EquipmentTransportItemBase(_pydantic.BaseModel):
+    transport_id: int
+    equipment_id: int
+    quantity: int
+
+
+class EquipmentTransportItemCreate(EquipmentTransportItemBase):
+    pass
+
+
+class EquipmentTransportItemRead(EquipmentTransportItemBase):
     id: int
 
+    class Config:
+        orm_mode = True
 
-class _AdminReportBase(_pydantic.BaseModel):
+
+# --- PAYMENT ---
+class PaymentBase(_pydantic.BaseModel):
+    reservation_id: int
+    amount: float
+    payment_method: str
+    status: Optional[str] = "pending"
+
+
+class PaymentCreate(PaymentBase):
+    pass
+
+
+class PaymentRead(PaymentBase):
+    id: int
+    created_at: dt.datetime
+
+    class Config:
+        orm_mode = True
+
+
+# --- REVIEW ---
+class ReviewBase(_pydantic.BaseModel):
+    equipment_id: int
+    rating: int
+    comment: Optional[str] = None
+
+
+class ReviewCreate(ReviewBase):
+    pass
+
+
+class ReviewRead(ReviewBase):
+    id: int
+    user_id: int
+    created_at: dt.datetime
+
+    class Config:
+        orm_mode = True
+
+
+# --- LOCATION ---
+class LocationBase(_pydantic.BaseModel):
+    contact_number: Optional[str] = None
+    street: Optional[str] = None
+    house_number: Optional[str] = None
+    city: Optional[str] = None
+
+
+class LocationCreate(LocationBase):
+    pass
+
+
+class LocationRead(LocationBase):
+    id: int
+    created_at: dt.datetime
+    updated_at: dt.datetime
+
+    class Config:
+        orm_mode = True
+
+
+class AdminReportBase(_pydantic.BaseModel):
     admin_id: int
     report_type: str
     title: str
-    start_date: _dt.date
-    end_date: _dt.date
+    start_date: dt.datetime
+    end_date: dt.datetime
     content: str
 
 
-class AdminReportCreate(_AdminReportBase):
+class AdminReportCreate(AdminReportBase):
     pass
 
 
-class AdminReportRead(_AdminReportBase):
+class AdminReportRead(AdminReportBase):
     id: int
+
+    class Config:
+        orm_mode = True

@@ -9,43 +9,36 @@ import database as _database
 import models as _models
 import services as _services
 from fastapi.security import OAuth2PasswordBearer
+import models
 
-# Załadowanie zmiennych środowiskowych
 load_dotenv()
 
-# Klucz do JWT
-SECRET_KEY = _os.getenv("JWT_SECRET")
-ALGORITHM = _os.getenv("ALGORITHM")
+SECRET_KEY = _os.getenv("JWT_SECRET", "testsecret")
+ALGORITHM = _os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(_os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
-# Konfiguracja OAuth2
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
 
 
-# --- Generowanie tokena JWT ---
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
-    expire = datetime.now() + (
-        expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    )
+    expire = datetime.now() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
-
     return _jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-# --- Pobieranie aktualnego użytkownika ---
 def get_current_user(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(_services.get_db)
+        token: str = Depends(oauth2_scheme),
+        db: Session = Depends(_services.get_db),
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-
     try:
         payload = _jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = payload.get("sub")
+        user_id: int = int(payload.get("sub"))
         if user_id is None:
             raise credentials_exception
     except _jwt.PyJWTError:
@@ -55,10 +48,18 @@ def get_current_user(
     if user is None:
         raise credentials_exception
 
+    if user.is_locked:
+        raise HTTPException(status_code=403, detail="User account is locked.")
+
     return user
 
 
-# --- Sprawdzanie czy użytkownik jest adminem ---
+def get_employee_user(current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in ["employee", "admin"]:
+        raise HTTPException(status_code=403, detail="Insufficient permissions")
+    return current_user
+
+
 def get_admin_user(current_user: _models.User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="You don't have enough permissions")
