@@ -1,0 +1,166 @@
+.App {
+    text-align: center;
+}
+
+.App-Navigation {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+}
+
+.App-Title {
+    display: flex;
+    justify-content: left;
+    padding: 0px 15px;
+    background: transparent;
+}
+
+.App-Nav {
+    display: flex;
+    justify-content: end;
+    gap: 30px;
+    margin-right: 15px;
+    font-size: large;
+    padding: 0px 5px;
+}
+
+.App-Button-Nav {
+    display: inline-block;
+    padding: 15px 30px;
+    background: transparent;
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.App-logo {
+    display: block;
+    pointer-events: none;
+    float: center;
+}
+
+.App-Greet {
+    max-width: 500px;
+    font-size: 2.5rem;
+    color: black;
+    font-weight: 700;
+    margin: 150px;
+}
+
+.App-Button {
+    display: inline-block;
+    padding: 15px 30px;
+    background: black;
+    color: white;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .App-Button:hover {
+        background: #444;
+    }
+
+.App-Scroll-Down {
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+    animation: bounce 1.5s infinite;
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+.App-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 50px;
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+    color: white;
+    position: relative;
+}
+
+.App-link {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+.App-Page2 {
+    background: linear-gradient(to bottom, #cce3ff, #86b6f6);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+.App-Page2-Gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 1100px;
+}
+.App-Page2-Gallery img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+}
+.Navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+.Navigation a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.Navigation a img {
+    width: 30px;
+    height: auto;
+}
+.App-Page3 {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+.App-Page3-Swipe {
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:20px;
+    max-width:1200px;
+}
+.App-Page3-Swipe img {
+    width:100%;
+    height:auto;
+}
