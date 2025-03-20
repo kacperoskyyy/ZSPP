@@ -1,5 +1,6 @@
 *.db
 *.pyc
 /backend/__pycache__
-/backend/__pycache__
 backend/.idea/vcs.xml
+*.vsidx
+frontend/.vs/slnx.sqlite
