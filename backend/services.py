@@ -62,7 +62,7 @@ async def create_user(user: _schemas.UserCreate, db: _orm.Session):
         last_name=user.last_name,
         phone_number=user.phone_number,
         email=user.email,
-        password_hash=_hash.bcrypt.hash(user.hash_password),
+        password_hash=_hash.bcrypt.hash(user.password),
     )
     db.add(user_obj)
     db.commit()

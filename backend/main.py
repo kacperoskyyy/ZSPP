@@ -2,6 +2,7 @@ import fastapi as _fastapi
 import fastapi.security as _security
 from typing import List
 import sqlalchemy.orm as _orm
+from fastapi.middleware.cors import CORSMiddleware
 
 import services as _services
 import schemas as _schemas
@@ -9,6 +10,19 @@ import auth as _auth
 import models as _models
 
 app = _fastapi.FastAPI()
+
+origins = [
+    "http://localhost:3000",  # adres Twojej aplikacji React
+    "http://localhost"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # -------------------------
@@ -40,6 +54,7 @@ async def register(
         user: _schemas.UserCreate,
         db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
+    print(user)
     db_user = await _services.get_user_by_email(user.email, db)
     if db_user:
         raise _fastapi.HTTPException(status_code=400, detail="Email already in use")
