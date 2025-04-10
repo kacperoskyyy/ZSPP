@@ -2,35 +2,23 @@ import "./App.css";
 import Navigation from "./Navigation";
 import ReviewSection from "./Review";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LogIn from "./LogIn";
+import LogIn from "./pages/Login";
 import ProductGallery from "./Products";
 import ImageGallery from "./Gallery";
 import WelcomeSection from "./Welcome";
 import MainNavigation from "./MainNav";
+import Footer from "./Footer";
+import MainPage from "./MainPage";
 function App() {
-    
-    return (
+  return (
     <div className="App">
-                <MainNavigation/>       
-                <header className="App-header">
-                    <WelcomeSection/>                   
-                </header>
-                <div className="App-Page2">
-                    <Navigation kierunek />
-                    <ImageGallery/>
-                </div>
-                <div className="App-Page3">
-                    <Navigation kierunek />
-                    <ProductGallery/>  
-                </div>
-                <div className="App-Page4">
-                    <Navigation kierunek />
-                    <ReviewSection />
-                </div>
-                <Routes>
-                    <Route path="/LogIn" element={<LogIn />} />
-                </Routes>           
-        </div>       
-    );
+      <MainNavigation />
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/LogIn" element={<LogIn />} />
+      </Routes>
+      <Footer />
+    </div>
+  );
 }
 export default App;
