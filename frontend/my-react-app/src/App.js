@@ -9,6 +9,7 @@ import WelcomeSection from "./Welcome";
 import MainNavigation from "./MainNav";
 import Footer from "./Footer";
 import MainPage from "./MainPage";
+import Register from "./pages/Register";
 function App() {
   return (
     <div className="App">
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/LogIn" element={<LogIn />} />
+        <Route path="/Register" element={<Register />} />
       </Routes>
       <Footer />
     </div>

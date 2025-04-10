@@ -18,7 +18,7 @@ const ReviewSection = () => {
     },
     {
       id: 3,
-      name: "Mihai� Jakubovi�",
+      name: "Mihaił Jakubović",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dignissim.",
       rating: 9,
     },

@@ -7,7 +7,7 @@ function Footer() {
         <div className="footer-section">
           <h3>Kontakt</h3>
           <p>ul. Willowa 2</p>
-          <p>Bielsko-Bia�a 43-300</p>
+          <p>Bielsko-Biała 43-300</p>
           <p>Tel: 123 456 789</p>
           <p>wss.kontakt@mail.com</p>
         </div>
