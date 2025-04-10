@@ -6,6 +6,7 @@ import LogIn from "./pages/Login";
 import ProductGallery from "./Products";
 import ImageGallery from "./Gallery";
 import WelcomeSection from "./Welcome";
+import AdminPanelMain from "./AdminPanelMain";
 import MainNavigation from "./MainNav";
 import Footer from "./Footer";
 import MainPage from "./MainPage";
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/LogIn" element={<LogIn />} />
         <Route path="/Register" element={<Register />} />
+        <Route path="/AdminPanel" element={<AdminPanelMain />} />
       </Routes>
       <Footer />
     </div>
