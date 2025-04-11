@@ -1,7 +1,8 @@
 // src/pages/Register.js
 import React, { useState } from "react";
 import FormContainer from "../components/FormContainer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const Register = () => {
   // Dane logowania
@@ -20,18 +21,22 @@ const Register = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  // Pobranie metody login z AuthContext oraz nawigacji do przekierowywania
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
 
-    // Walidacja prostego dopasowania haseł
+    // Walidacja dopasowania haseł
     if (password !== repeatPassword) {
       setError("Hasła nie są takie same!");
       return;
     }
 
-    // Przygotuj dane do wysłania
+    // Przygotowanie danych do wysłania
     const payload = {
       email,
       password,
@@ -56,9 +61,21 @@ const Register = () => {
       }
 
       const data = await response.json();
+      // Zapis tokenu w localStorage
       localStorage.setItem("access_token", data.access_token);
 
+      // Ustawienie danych użytkownika w kontekście
+      login(data.user);
+
       setSuccessMessage("Konto zostało założone pomyślnie!");
+
+      // Opcjonalnie – przekierowanie po pomyślnej rejestracji
+      if (data.user.role === "admin") {
+        navigate("/admin-panel");
+      } else {
+        navigate("/user-dashboard");
+      }
+
       // Wyczyść pola
       setEmail("");
       setPassword("");
@@ -170,7 +187,6 @@ const Register = () => {
             <option value="">Wybierz płeć</option>
             <option value="true">Mężczyzna</option>
             <option value="false">Kobieta</option>
-            {/*<option value="other">Inna</option>*/}
           </select>
         </div>
         <div style={{ marginBottom: "20px" }}>
@@ -186,7 +202,6 @@ const Register = () => {
           />
         </div>
 
-        {/* Przyciski */}
         <button
           type="submit"
           style={{
@@ -203,7 +218,6 @@ const Register = () => {
         </button>
       </form>
 
-      {/* Link do logowania (np. jeśli ktoś już ma konto) */}
       <div style={{ textAlign: "center", marginTop: "15px" }}>
         Masz już konto? <Link to="/login">Zaloguj się</Link>
       </div>
