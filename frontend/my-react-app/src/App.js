@@ -19,7 +19,7 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/LogIn" element={<LogIn />} />
         <Route path="/Register" element={<Register />} />
-        <Route path="/AdminPanel" element={<AdminPanelMain />} />
+        {/* <Route path="/AdminPanel" element={<AdminPanelMain />} /> */}
       </Routes>
       <Footer />
     </div>

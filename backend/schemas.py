@@ -23,6 +23,8 @@ class UserRead(UserBase):
     birth_date: Optional[dt.date]
     created_at: dt.datetime
     role: str
+    profile_image: Optional[str]
+    created_at: str
 
     class Config:
         orm_mode = True
@@ -33,16 +35,30 @@ class UserUpdate(_pydantic.BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     phone_number: Optional[str] = None
+    profile_image: Optional[str] = None
+
+
+class PasswordResetRequest(_pydantic.BaseModel):
+    email: _pydantic.EmailStr
+
+
+class PasswordResetConfirm(_pydantic.BaseModel):
+    token: str
+    new_password: str
 
 
 # --- CATEGORY ---
 class CategoryBase(_pydantic.BaseModel):
     name: str
     description: Optional[str] = None
+    image_path: str
 
 
 class CategoryCreate(CategoryBase):
-    pass
+    id: int
+
+    class Config:
+        orm_mode = True
 
 
 class CategoryRead(CategoryBase):
@@ -53,6 +69,21 @@ class CategoryRead(CategoryBase):
 
 
 # --- EQUIPMENT ---
+class EquipmentImageBase(_pydantic.BaseModel):
+    image_path: str
+
+
+class EquipmentImageCreate(EquipmentImageBase):
+    equipment_id: int
+
+
+class EquipmentImageRead(EquipmentImageBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
 class EquipmentBase(_pydantic.BaseModel):
     name: str
     description: Optional[str] = None
@@ -69,6 +100,7 @@ class EquipmentRead(EquipmentBase):
     id: int
     created_at: dt.datetime
     updated_at: dt.datetime
+    images: List[EquipmentImageRead] = []
 
     class Config:
         orm_mode = True

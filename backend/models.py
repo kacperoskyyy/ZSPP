@@ -13,11 +13,12 @@ class User(database.Base):
     first_name = sql.Column(sql.String(50))
     last_name = sql.Column(sql.String(50))
     phone_number = sql.Column(sql.String(20))
-    gender = sql.Column(sql.String(20))
+    gender = sql.Column(sql.Boolean)
     birth_date = sql.Column(sql.Date)
     created_at = sql.Column(sql.DateTime, default=dt.datetime.now)
     updated_at = sql.Column(sql.DateTime, default=dt.datetime.now, onupdate=dt.datetime.now)
     role = sql.Column(sql.String(20), default="user")
+    profile_image = sql.Column(sql.String(255))
 
     reservations = orm.relationship("Reservation", back_populates="user")
     reviews = orm.relationship("Review", back_populates="user")
@@ -32,6 +33,7 @@ class Category(database.Base):
     __tablename__ = "categories"
     id = sql.Column(sql.Integer, primary_key=True, index=True, autoincrement=True)
     name = sql.Column(sql.String(50), nullable=False)
+    image_path = sql.Column(sql.String(255), nullable=False)
     description = sql.Column(sql.Text)
     equipment = orm.relationship("Equipment", back_populates="category")
 
@@ -49,9 +51,16 @@ class Equipment(database.Base):
     category = orm.relationship("Category", back_populates="equipment")
     reservation_items = orm.relationship("ReservationItem", back_populates="equipment")
     reviews = orm.relationship("Review", back_populates="equipment")
-    # Używane przy transportach:
     transport_items = orm.relationship("EquipmentTransportItem", back_populates="equipment")
+    images = orm.relationship("EquipmentImage", back_populates="equipment")
 
+class EquipmentImage(database.Base):
+    __tablename__ = "equipment_images"
+    id = sql.Column(sql.Integer, primary_key=True, index=True, autoincrement=True)
+    equipment_id = sql.Column(sql.Integer, sql.ForeignKey("equipment.id"), nullable=False)
+    image_path = sql.Column(sql.String(255), nullable=False)
+
+    equipment = orm.relationship("Equipment", back_populates="images")
 
 class Reservation(database.Base):
     __tablename__ = "reservations"

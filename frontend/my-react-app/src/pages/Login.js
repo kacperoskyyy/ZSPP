@@ -32,6 +32,9 @@ const Login = () => {
         throw new Error("Błędne dane logowania lub inny problem z serwerem.");
       }
 
+      const data = await response.json();
+      localStorage.setItem("access_token", data.access_token);
+
       setSuccessMessage("Zalogowano pomyślnie!");
       // Optionally redirect to another page
     } catch (err) {
