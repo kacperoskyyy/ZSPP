@@ -55,6 +55,9 @@ const Register = () => {
         );
       }
 
+      const data = await response.json();
+      localStorage.setItem("access_token", data.access_token);
+
       setSuccessMessage("Konto zostało założone pomyślnie!");
       // Wyczyść pola
       setEmail("");

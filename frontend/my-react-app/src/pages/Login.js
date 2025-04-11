@@ -10,7 +10,6 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleLogin = async (e) => {
-    
     e.preventDefault();
     setError("");
     setSuccessMessage("");
@@ -32,6 +31,9 @@ const Login = () => {
       if (!response.ok) {
         throw new Error("Błędne dane logowania lub inny problem z serwerem.");
       }
+
+      const data = await response.json();
+      localStorage.setItem("access_token", data.access_token);
 
       setSuccessMessage("Zalogowano pomyślnie!");
       // Optionally redirect to another page
