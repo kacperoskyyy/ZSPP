@@ -5,6 +5,45 @@ import models as _models
 import schemas as _schemas
 import datetime as _dt
 import fastapi as _fastapi
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# --- Konfiguracja Maila ---
+mail_conf = ConnectionConfig(
+    MAIL_USERNAME=os.getenv("MAIL_USERNAME"),  # np. "your_email@gmail.com"
+    MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),  # hasło lub app password
+    MAIL_FROM=os.getenv("MAIL_FROM"),  # np. "your_email@gmail.com"
+    MAIL_PORT=int(os.getenv("MAIL_PORT", 587)),  # domyślnie 587 dla TLS
+    MAIL_SERVER=os.getenv("MAIL_SERVER"),  # np. "smtp.gmail.com"
+    MAIL_FROM_NAME=os.getenv("MAIL_FROM_NAME"),
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    USE_CREDENTIALS=True,
+    VALIDATE_CERTS=True
+)
+
+
+async def send_reset_email(email: str, reset_link: str):
+    message = MessageSchema(
+        subject="Reset hasła - Twoja aplikacja",
+        recipients=[email],
+        body=f"""
+        <html>
+          <body>
+            <p>Cześć,</p>
+            <p>Aby zresetować swoje hasło, kliknij w poniższy link:</p>
+            <p><a href="{reset_link}">{reset_link}</a></p>
+            <p>Jeśli nie zamawiałeś resetu hasła, zignoruj tę wiadomość.</p>
+          </body>
+        </html>
+        """,
+        subtype="html"
+    )
+    fm = FastMail(mail_conf)
+    await fm.send_message(message)
 
 
 # --- Inicjalizacja bazy danych ---
@@ -177,6 +216,17 @@ async def delete_category(category_id: int, db: _orm.Session):
 async def get_all_equipment(db: _orm.Session):
     equipment_list = db.query(_models.Equipment).all()
     return [_schemas.EquipmentRead.model_validate(eq) for eq in equipment_list]
+
+
+async def create_equipment_image(image_data: _schemas.EquipmentImageCreate, db: _orm.Session):
+    new_image = _models.EquipmentImage(
+        equipment_id=image_data.equipment_id,
+        image_path=image_data.image_path
+    )
+    db.add(new_image)
+    db.commit()
+    db.refresh(new_image)
+    return new_image
 
 
 async def get_equipment(equipment_id: int, db: _orm.Session):

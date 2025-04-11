@@ -33,6 +33,7 @@ class Category(database.Base):
     __tablename__ = "categories"
     id = sql.Column(sql.Integer, primary_key=True, index=True, autoincrement=True)
     name = sql.Column(sql.String(50), nullable=False)
+    image_path = sql.Column(sql.String(255), nullable=False)
     description = sql.Column(sql.Text)
     equipment = orm.relationship("Equipment", back_populates="category")
 
