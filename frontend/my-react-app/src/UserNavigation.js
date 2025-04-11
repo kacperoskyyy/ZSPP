@@ -3,16 +3,29 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
 
+
 const UserNavigation = () => {
   const { logout } = useAuth();
 
   return (
-    <header>
-      <nav>
-        <Link to="/">Strona główna</Link>
-        <Link to="/user-dashboard">Panel użytkownika</Link>
-        <button onClick={logout}>Wyloguj się</button>
-      </nav>
+    <header className="User-Header-Nav">
+      <div className="User-Nav-Left">
+        <Link className="MainPage" to="/">
+        <span>WSS</span>
+        </Link>
+        {/* <button onClick={logout}>Wyloguj się</button>8?} */}
+      </div>
+      <div className="User-Nav-Right">
+      <Link className="Profile" to="/user-dashboard">
+        <img src="/anon.png" alt="koszyk" className="NavIcon" />
+        <span>Panel użytkownika</span>
+        </Link>
+        <Link className="Basket" to="/">
+        <img src="/sport.png" alt="koszyk" className="NavIcon" />
+        <span>Koszyk</span>
+        </Link>
+
+      </div>
     </header>
   );
 };

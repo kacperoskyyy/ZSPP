@@ -25,7 +25,7 @@ const AdminDashboard = () => {
         <h3>Menu Admina</h3>
         <ul style={{ listStyle: "none", padding: 0 }}>
           <li>
-            <button
+            <button className="Dashboard-Admin-Button"
               onClick={() => setActiveTab("dashboard")}
               style={{
                 width: "100%",

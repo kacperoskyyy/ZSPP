@@ -7,6 +7,7 @@ const ImageGallery = () => {
         <img classname="App-Page2-Pict2" src="/Obraz2.jpg" alt="Obrazek2" />
         <img classname="App-Page2-Pict3" src="/Obraz3.jpg" alt="Obrazek3" />
         <img classname="App-Page2-Pict4" src="/Obraz4.jpg" alt="Obrazek4" />
+        
 
     </div>
     );
