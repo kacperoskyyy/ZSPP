@@ -69,9 +69,23 @@ async def register(
     db_user = await _services.get_user_by_email(user.email, db)
     if db_user:
         raise _fastapi.HTTPException(status_code=400, detail="Email already in use")
+
     new_user = await _services.create_user(user, db)
     token = _auth.create_access_token(data={"sub": str(new_user.id)})
-    return {"access_token": token, "token_type": "bearer"}
+
+    # Przygotowanie danych użytkownika do zwrócenia na front-end
+    user_data = {
+        "id": new_user.id,
+        "email": new_user.email,
+        "first_name": new_user.first_name,
+        "last_name": new_user.last_name,
+        "phone_number": new_user.phone_number,
+        "role": new_user.role,
+        "profile_image": new_user.profile_image,
+        "created_at": str(new_user.created_at)
+    }
+
+    return {"access_token": token, "token_type": "bearer", "user": user_data}
 
 
 @app.post("/api/login")
@@ -83,7 +97,17 @@ async def login(
     if not user or not user.verify_password(form_data.password):
         raise _fastapi.HTTPException(status_code=400, detail="Invalid credentials")
     token = _auth.create_access_token(data={"sub": str(user.id)})
-    return {"access_token": token, "token_type": "bearer"}
+
+    user_data = {
+        "id": user.id,
+        "email": user.email,
+        "role": user.role,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "profile_image": user.profile_image
+    }
+    return {"access_token": token, "token_type": "bearer", "user": user_data}
+
 
 
 @app.post("/api/password-reset")
@@ -128,6 +152,7 @@ async def confirm_password_reset(
     # Usuwamy token, aby nie można było go ponownie użyć
     del password_reset_tokens[payload.token]
     return {"message": "Hasło zostało pomyślnie zresetowane."}
+
 
 # -------------------------
 # Endpointy dla użytkowników (zalogowanych)
