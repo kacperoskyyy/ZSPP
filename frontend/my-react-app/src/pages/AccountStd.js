@@ -1,6 +1,8 @@
 import React from "react";
 import Sidebar from "./SideBar-Std";
 import AccountNavigation from "./AccountNav";
+import { useNavigate } from "react-router-dom";
+
 
 const reservations = [
     {
@@ -17,11 +19,12 @@ const reservations = [
       price: "187,99 zł / dzień",
       status: "Rezerwacja",
       statusColor: "status-yellow",
-      button: <Button className="cancel-button">Anuluj rezerwację</Button>,
+      button: <button className="cancel-button">Anuluj rezerwację</button>,
     },
   ];
 
-  export default function BikeGPSRental() {
+ const Account = () => {
+    const navigate = useNavigate();
     return (
       <div className="app-container">
         <Sidebar/>
@@ -74,4 +77,4 @@ const reservations = [
       </div>
     );
   }
-  
+  export default Account;
