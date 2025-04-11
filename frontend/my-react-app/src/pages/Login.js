@@ -1,20 +1,22 @@
 // src/pages/Login.js
 import React, { useState } from "react";
 import FormContainer from "../components/FormContainer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
 
-    // Create URLSearchParams from the form data
     const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
@@ -34,9 +36,17 @@ const Login = () => {
 
       const data = await response.json();
       localStorage.setItem("access_token", data.access_token);
-
       setSuccessMessage("Zalogowano pomyślnie!");
-      // Optionally redirect to another page
+
+      // Ustawiamy dane użytkownika w kontekście
+      login(data.user);
+
+      // Przekierowanie w zależności od roli
+      if (data.user.role === "admin") {
+        navigate("/admin-panel");
+      } else {
+        navigate("/user-dashboard");
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -49,7 +59,6 @@ const Login = () => {
       {successMessage && (
         <p style={{ color: "green", textAlign: "center" }}>{successMessage}</p>
       )}
-
       <form onSubmit={handleLogin}>
         <div style={{ marginBottom: "15px" }}>
           <label htmlFor="username">Adres e-mail</label>
@@ -75,7 +84,6 @@ const Login = () => {
             required
           />
         </div>
-
         <button
           type="submit"
           style={{
@@ -92,13 +100,9 @@ const Login = () => {
           Zaloguj się
         </button>
       </form>
-
-      {/* Link do przypomnienia hasła - możesz zrobić osobną stronę, np. /forgot-password */}
       <div style={{ textAlign: "center", marginBottom: "10px" }}>
         <Link to="/forgot-password">Przypomnij hasło</Link>
       </div>
-
-      {/* Link do rejestracji (przenosi na stronę rejestracji) */}
       <div style={{ textAlign: "center" }}>
         Nie masz konta? <Link to="/register">Zarejestruj się</Link>
       </div>

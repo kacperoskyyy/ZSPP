@@ -137,6 +137,7 @@ Projekt wykorzystuje **fastapi-mail** do wysyłki wiadomości (np. resetujących
 
 ```
 .
+├── auth.py               # Definicje authoryzacji
 ├── main.py               # Główny plik aplikacji FastAPI
 ├── models.py             # Definicje modeli bazy danych (SQLAlchemy)
 ├── schemas.py            # Definicje schematów (Pydantic)
