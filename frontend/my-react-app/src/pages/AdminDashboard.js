@@ -1,144 +1,111 @@
-// src/pages/AdminDashboard.js
+
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState("dashboard"); // domyślny widok
+  const [activeTab, setActiveTab] = useState("dashboard"); // default view
   const navigate = useNavigate();
 
-  // Funkcja pomocnicza do wyświetlania "Brak" w przypadku pustych danych
+  // Helper function for empty data
   const displayField = (field) => (field && field !== "" ? field : "Brak");
 
   return (
-    <div style={{ display: "flex", minHeight: "calc(100vh - 100px)" }}>
-      {/* Sidebar - menu administratora */}
-      <aside
-        style={{
-          width: "250px",
-          borderRight: "1px solid #ccc",
-          padding: "1rem",
-          backgroundColor: "#f7f7f7",
-        }}
-      >
+    <div className="dashboard-container">
+      {/* Sidebar - admin menu */}
+      <aside className="sidebar">
         <h3>Menu Admina</h3>
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="sidebar-menu horizontal-menu">
           <li>
-            <button className="Dashboard-Admin-Button"
+            <button 
+              className={`menu-button ${activeTab === "dashboard" ? "menu-button-active" : "menu-button-inactive"}`}
               onClick={() => setActiveTab("dashboard")}
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "none",
-                background:
-                  activeTab === "dashboard" ? "#007bff" : "transparent",
-                color: activeTab === "dashboard" ? "#fff" : "#000",
-                textAlign: "left",
-                cursor: "pointer",
-                marginBottom: "0.5rem",
-              }}
             >
-              Panel Główny
+              <img 
+                src="/chart.png" 
+                alt="" 
+                className={`menu-icon ${activeTab === "dashboard" ? "icon-white" : ""}`} 
+              />
+              <span>Panel Główny</span>
             </button>
           </li>
           <li>
             <button
+              className={`menu-button ${activeTab === "users" ? "menu-button-active" : "menu-button-inactive"}`}
               onClick={() => setActiveTab("users")}
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "none",
-                background: activeTab === "users" ? "#007bff" : "transparent",
-                color: activeTab === "users" ? "#fff" : "#000",
-                textAlign: "left",
-                cursor: "pointer",
-                marginBottom: "0.5rem",
-              }}
             >
-              Zarządzaj użytkownikami
+              <img 
+                src="/profile.png" 
+                alt="" 
+                className={`menu-icon ${activeTab === "users" ? "icon-white" : ""}`} 
+              />
+              <span>Zarządzaj użytkownikami</span>
             </button>
           </li>
           <li>
             <button
+              className={`menu-button ${activeTab === "categories" ? "menu-button-active" : "menu-button-inactive"}`}
               onClick={() => setActiveTab("categories")}
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "none",
-                background:
-                  activeTab === "categories" ? "#007bff" : "transparent",
-                color: activeTab === "categories" ? "#fff" : "#000",
-                textAlign: "left",
-                cursor: "pointer",
-                marginBottom: "0.5rem",
-              }}
             >
-              Zarządzaj kategoriami
+              <img 
+                src="/category.png" 
+                alt="" 
+                className={`menu-icon ${activeTab === "categories" ? "icon-white" : ""}`} 
+              />
+              <span>Zarządzaj kategoriami</span>
             </button>
           </li>
           <li>
             <button
+              className={`menu-button ${activeTab === "equipment" ? "menu-button-active" : "menu-button-inactive"}`}
               onClick={() => setActiveTab("equipment")}
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "none",
-                background:
-                  activeTab === "equipment" ? "#007bff" : "transparent",
-                color: activeTab === "equipment" ? "#fff" : "#000",
-                textAlign: "left",
-                cursor: "pointer",
-                marginBottom: "0.5rem",
-              }}
             >
-              Zarządzaj sprzętem
+              <img 
+                src="/sport.png" 
+                alt="" 
+                className={`menu-icon ${activeTab === "equipment" ? "icon-white" : ""}`} 
+              />
+              <span>Zarządzaj sprzętem</span>
             </button>
           </li>
           <li>
             <button
+              className={`menu-button ${activeTab === "reports" ? "menu-button-active" : "menu-button-inactive"}`}
               onClick={() => setActiveTab("reports")}
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "none",
-                background: activeTab === "reports" ? "#007bff" : "transparent",
-                color: activeTab === "reports" ? "#fff" : "#000",
-                textAlign: "left",
-                cursor: "pointer",
-                marginBottom: "0.5rem",
-              }}
             >
-              Raporty
+              <img 
+                src="/info.png" 
+                alt="" 
+                className={`menu-icon ${activeTab === "reports" ? "icon-white" : ""}`} 
+              />
+              <span>Raporty</span>
             </button>
           </li>
           <li>
             <button
+              className="menu-button"
               onClick={() => {
                 logout();
                 navigate("/");
               }}
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                border: "none",
-                background: "transparent",
-                color: "#000",
-                textAlign: "left",
-                cursor: "pointer",
-                marginTop: "1rem",
-              }}
             >
-              Wyloguj się
+              <img 
+                src="/logout.png" 
+                alt="" 
+                className="menu-icon" 
+              />
+              <span>Wyloguj się</span>
             </button>
           </li>
         </ul>
       </aside>
 
-      {/* Główna zawartość panelu admina */}
-      <main style={{ flex: 1, padding: "1rem" }}>
+      {/* Main admin panel content */}
+      <main className="User-Main-Content">
         {activeTab === "dashboard" && (
-          <div>
+          <div className="dashboard-item">
             <h2>Panel Główny Admina</h2>
             <p>
               <strong>ID:</strong> {displayField(user.id)}
@@ -161,7 +128,7 @@ const AdminDashboard = () => {
                 <img
                   src={`/${user.profile_image}`}
                   alt="Profilowe"
-                  style={{ width: "100px" }}
+                  className="profile-image"
                 />
               ) : (
                 "Brak"
@@ -170,26 +137,25 @@ const AdminDashboard = () => {
           </div>
         )}
         {activeTab === "users" && (
-          <div>
+          <div className="dashboard-item">
             <h2>Zarządzaj użytkownikami</h2>
             <p>Tutaj możesz wyświetlić i edytować listę użytkowników.</p>
-            {/* Wywołanie API, mapowanie danych – tutaj przykład placeholder */}
           </div>
         )}
         {activeTab === "categories" && (
-          <div>
+          <div className="dashboard-item">
             <h2>Zarządzaj kategoriami</h2>
             <p>Tutaj możesz dodawać, edytować i usuwać kategorie produktów.</p>
           </div>
         )}
         {activeTab === "equipment" && (
-          <div>
+          <div className="dashboard-item">
             <h2>Zarządzaj sprzętem</h2>
             <p>Tutaj możesz zarządzać produktami i przypisywać zdjęcia.</p>
           </div>
         )}
         {activeTab === "reports" && (
-          <div>
+          <div className="dashboard-item">
             <h2>Raporty</h2>
             <p>Tutaj możesz generować raporty i analizować dane.</p>
           </div>

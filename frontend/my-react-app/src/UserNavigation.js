@@ -17,7 +17,7 @@ const UserNavigation = () => {
       </div>
       <div className="User-Nav-Right">
       <Link className="Profile" to="/user-dashboard">
-        <img src="/anon.png" alt="koszyk" className="NavIcon" />
+        <img src="/gregory.png" alt="koszyk" className="NavIcon" />
         <span>Panel użytkownika</span>
         </Link>
         <Link className="Basket" to="/">

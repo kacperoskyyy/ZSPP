@@ -11,146 +11,12 @@ const UserDashboard = () => {
     return field && field !== "" ? field : "Brak";
   };
 
-  // return (
-  //   <div style={{ display: "flex", minHeight: "calc(100vh - 100px)" }}>
-  //     {/* Sidebar */}
-  //     <aside
-  //       style={{
-  //         width: "250px",
-  //         borderRight: "1px solid #ccc",
-  //         padding: "1rem",
-  //       }}
-  //     >
-  //       <h3>Menu</h3>
-  //       <ul style={{ listStyle: "none", padding: 0 }}>
-  //         <li>
-  //           <button
-  //             onClick={() => setActiveTab("profile")}
-  //             style={{
-  //               width: "100%",
-  //               padding: "0.5rem",
-  //               border: "none",
-  //               background: activeTab === "profile" ? "#007bff" : "transparent",
-  //               color: activeTab === "profile" ? "#fff" : "#000",
-  //               textAlign: "left",
-  //               cursor: "pointer",
-  //               marginBottom: "0.5rem",
-  //             }}
-  //           >
-  //             Profil
-  //           </button>
-  //         </li>
-  //         <li>
-  //           <button
-  //             onClick={() => setActiveTab("reservations")}
-  //             style={{
-  //               width: "100%",
-  //               padding: "0.5rem",
-  //               border: "none",
-  //               background:
-  //                 activeTab === "reservations" ? "#007bff" : "transparent",
-  //               color: activeTab === "reservations" ? "#fff" : "#000",
-  //               textAlign: "left",
-  //               cursor: "pointer",
-  //               marginBottom: "0.5rem",
-  //             }}
-  //           >
-  //             Rezerwacje
-  //           </button>
-  //         </li>
-  //         <li>
-  //           <button
-  //             onClick={() => setActiveTab("reviews")}
-  //             style={{
-  //               width: "100%",
-  //               padding: "0.5rem",
-  //               border: "none",
-  //               background: activeTab === "reviews" ? "#007bff" : "transparent",
-  //               color: activeTab === "reviews" ? "#fff" : "#000",
-  //               textAlign: "left",
-  //               cursor: "pointer",
-  //               marginBottom: "0.5rem",
-  //             }}
-  //           >
-  //             Opinie
-  //           </button>
-  //         </li>
-  //         <li>
-  //           <button
-  //             onClick={() => {
-  //               logout();
-  //               window.location.href = "/";
-  //             }}
-  //             style={{
-  //               width: "100%",
-  //               padding: "0.5rem",
-  //               border: "none",
-  //               background: "transparent",
-  //               color: "#000",
-  //               textAlign: "left",
-  //               cursor: "pointer",
-  //               marginTop: "1rem",
-  //             }}
-  //           >
-  //             Wyloguj się
-  //           </button>
-  //         </li>
-  //       </ul>
-  //     </aside>
-
-
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
       <aside className="sidebar">
         <h3>Menu</h3>
         
-        {/* Sekcja z ikonami nad linkami */}
-        <div className="icon-bar">
-          <div 
-            onClick={() => setActiveTab("profile")}
-            className="icon-wrapper"
-          >
-            <img 
-              src="/Store.png" 
-              alt="Profil" 
-              className={`top-icon ${activeTab === "profile" ? "icon-active" : "icon-inactive"}`} 
-            />
-          </div>
-          <div 
-            onClick={() => setActiveTab("reservations")}
-            className="icon-wrapper"
-          >
-            <img 
-              src="/path/to/your/reservations-icon.png" 
-              alt="Rezerwacje" 
-              className={`top-icon ${activeTab === "reservations" ? "icon-active" : "icon-inactive"}`} 
-            />
-          </div>
-          <div 
-            onClick={() => setActiveTab("reviews")}
-            className="icon-wrapper"
-          >
-            <img 
-              src="/path/to/your/reviews-icon.png" 
-              alt="Opinie" 
-              className={`top-icon ${activeTab === "reviews" ? "icon-active" : "icon-inactive"}`} 
-            />
-          </div>
-          <div 
-            onClick={() => {
-              logout();
-              window.location.href = "/";
-            }}
-            className="icon-wrapper"
-          >
-            <img 
-              src="/path/to/your/logout-icon.png" 
-              alt="Wyloguj" 
-              className="top-icon icon-inactive" 
-            />
-          </div>
-        </div>
         
         <ul className="sidebar-menu">
           <li>
@@ -159,7 +25,7 @@ const UserDashboard = () => {
               onClick={() => setActiveTab("profile")}
             >
               <img 
-                src="/Sport.png" 
+                src="/profile.png" 
                 alt="" 
                 className={`menu-icon ${activeTab === "profile" ? "icon-white" : ""}`} 
               />
@@ -172,7 +38,7 @@ const UserDashboard = () => {
               onClick={() => setActiveTab("reservations")}
             >
               <img 
-                src="/path/to/your/reservations-icon.png" 
+                src="/reservations.png" 
                 alt="" 
                 className={`menu-icon ${activeTab === "reservations" ? "icon-white" : ""}`} 
               />
@@ -185,7 +51,7 @@ const UserDashboard = () => {
               onClick={() => setActiveTab("reviews")}
             >
               <img 
-                src="/path/to/your/reviews-icon.png" 
+                src="info.png" 
                 alt="" 
                 className={`menu-icon ${activeTab === "reviews" ? "icon-white" : ""}`} 
               />
@@ -194,14 +60,14 @@ const UserDashboard = () => {
           </li>
           <li>
             <button
-              className="logout-button"
+              className="menu-button"
               onClick={() => {
                 logout();
                 window.location.href = "/";
               }}
             >
               <img 
-                src="/path/to/your/logout-icon.png" 
+                src="/logout.png"
                 alt="" 
                 className="menu-icon" 
               />
