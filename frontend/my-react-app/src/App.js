@@ -57,8 +57,7 @@ function App() {
             <Route
               path="/admin-panel"
               element={
-                <ProtectedRoute>
-                  {/* Opcjonalnie możesz dodatkowo sprawdzić rolę, by admin miał wyższy priorytet */}
+                <ProtectedRoute requiredRole="admin">
                   <AdminDashboard />
                 </ProtectedRoute>
               }

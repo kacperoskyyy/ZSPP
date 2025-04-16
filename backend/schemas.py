@@ -24,7 +24,6 @@ class UserRead(UserBase):
     created_at: dt.datetime
     role: str
     profile_image: Optional[str]
-    created_at: str
 
     class Config:
         orm_mode = True

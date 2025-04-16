@@ -3,11 +3,19 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-const ProtectedRoute = ({ children, redirectPath = "/login" }) => {
+const ProtectedRoute = ({
+  children,
+  requiredRole = "user",
+  redirectPath = "/login",
+}) => {
   const { user } = useAuth();
 
   // Jeśli użytkownik nie jest zalogowany, przekierowujemy go na stronę logowania.
   if (!user) {
+    return <Navigate to={redirectPath} replace />;
+  }
+  // TODO Zmaian linku
+  if (requiredRole && user.role !== requiredRole) {
     return <Navigate to={redirectPath} replace />;
   }
 
