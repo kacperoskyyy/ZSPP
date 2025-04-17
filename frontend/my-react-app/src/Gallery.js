@@ -1,16 +1,24 @@
 import React from "react";
 
 const ImageGallery = () => {
-    return (
-        <div className="App-Page2-Gallery">
-        <img classname="App-Page2-Pict1" src="/Obraz1.jpg" alt="Obrazek1" />
-        <img classname="App-Page2-Pict2" src="/Obraz2.jpg" alt="Obrazek2" />
-        <img classname="App-Page2-Pict3" src="/Obraz3.jpg" alt="Obrazek3" />
-        <img classname="App-Page2-Pict4" src="/Obraz4.jpg" alt="Obrazek4" />
-        
+  const items = [
+    { src: "/Obraz1.jpg", alt: "Obrazek1", label: "Sporty Górskie" },
+    { src: "/Obraz2.jpg", alt: "Obrazek2", label: "Sporty Zimowe" },
+    { src: "/Obraz3.jpg", alt: "Obrazek3", label: "Sporty Wodne" },
+    { src: "/Obraz4.jpg", alt: "Obrazek4", label: "Na zewnątrz" },
+  ];
 
+  return (
+    <div className="gallery">
+      {items.map((it, i) => (
+        <div className="gallery-item" key={i}>
+          <img className="gallery-img" src={it.src} alt={it.alt} />
+          <div className="overlay" />
+          <p className="overlay-text">{it.label}</p>
+        </div>
+      ))}
     </div>
-    );
-  };
-  
-  export default ImageGallery;
+  );
+};
+
+export default ImageGallery;

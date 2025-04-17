@@ -21,6 +21,8 @@ const Register = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   // Pobranie metody login z AuthContext oraz nawigacji do przekierowywania
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ const Register = () => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
-
+    setLoading(true);
     // Walidacja dopasowania haseł
     if (password !== repeatPassword) {
       setError("Hasła nie są takie same!");
@@ -87,6 +89,8 @@ const Register = () => {
       setPhone("");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -213,8 +217,9 @@ const Register = () => {
             borderRadius: "4px",
             cursor: "pointer",
           }}
+          disabled={loading}
         >
-          Zarejestruj się
+          {loading ? "Proszę czekać…" : "Zarejestruj się"}
         </button>
       </form>
 

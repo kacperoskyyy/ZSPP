@@ -9,8 +9,8 @@ const MainNavigation = () => {
         <h1 onClick={() => navigate("/")}>WSS</h1>
       </div>
       <div className="App-Nav">
-        <button className="App-Button-Nav">Sprzęt</button>
-        <button className="App-Button-Nav">Cennik</button>
+        <button onClick={() => navigate("/Catalogue")} className="App-Button-Nav">Sprzęt</button>
+        <button onClick={() => navigate("/contact")} className="App-Button-Nav">Kontakt</button>
         <button onClick={() => navigate("/LogIn")} className="App-Button-Nav">
           Zaloguj się
         </button>

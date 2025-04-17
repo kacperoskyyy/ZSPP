@@ -11,11 +11,13 @@ const Login = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
+    setLoading(true);
 
     const formData = new URLSearchParams();
     formData.append("username", username);
@@ -40,6 +42,8 @@ const Login = () => {
 
       // Ustawiamy dane użytkownika w kontekście
       login(data.user);
+      setUsername("");
+      setPassword("");
 
       // Przekierowanie w zależności od roli
       if (data.user.role === "admin") {
@@ -49,6 +53,8 @@ const Login = () => {
       }
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,8 +102,9 @@ const Login = () => {
             cursor: "pointer",
             marginBottom: "10px",
           }}
+          disabled={loading}
         >
-          Zaloguj się
+          {loading ? "Proszę czekać…" : "Zaloguj się"}
         </button>
       </form>
       <div style={{ textAlign: "center", marginBottom: "10px" }}>
