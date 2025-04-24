@@ -1,5 +1,6 @@
 // src/pages/admin/ManageReports.js
 import React, { useState, useEffect } from "react";
+import ButtonPanel from "../../components/ButtonPanel";
 
 const ManageReports = () => {
   const [reps, setReps] = useState([]);
@@ -16,7 +17,18 @@ const ManageReports = () => {
 
   return (
     <div>
-      <h2>Raporty</h2>
+      <h2>Raporty ogólne</h2>
+      <ButtonPanel
+        iconSrc="public/money.png"
+        label="Wygeneruj pełny raport finansowy"
+        onClick={null}
+    />
+    <ButtonPanel
+        iconSrc="public/money.png"
+        label="Wygeneruj raport z podsumowanie każdej lokalizacji"
+        onClick={null}
+    />
+
       <table className="admin-table">
         <thead>
           <tr>
