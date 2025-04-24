@@ -1,18 +1,64 @@
-// src/components/UserReservations.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const UserReservations = () => {
-  // Tu możesz pobrać rezerwacje z API (np. /api/reservations) i wyświetlić listę
+  const [reservations, setReservations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    fetch("/api/reservations", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Nie można pobrać rezerwacji.");
+        return res.json();
+      })
+      .then((data) => setReservations(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <p>Ładowanie rezerwacji…</p>;
+  if (error) return <p style={{ color: "red" }}>Błąd: {error}</p>;
+
+  // Załóżmy, że "pending" i "active" to bieżące rezerwacje
+  const current = reservations.filter(
+    (r) => r.status === "pending" || r.status === "active"
+  );
+
+  const cancelReservation = (id) => {
+    // TODO: zaimplementuj endpoint anulowania po stronie API
+    fetch(`/api/reservations/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
+    }).then(() => {
+      setReservations((prev) => prev.filter((r) => r.id !== id));
+    });
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h2>Moje rezerwacje</h2>
-      {/* Przykładowa lista rezerwacji */}
-      <div className="reservation-card">
-        <p>Liczniki GPS rowerowy Garmin Edge 1040</p>
-        <p>Status: Wypożyczony</p>
-        <button>Anuluj rezerwację</button>
-      </div>
-      {/* Dodaj tyle elementów, ile rezerwacji pobierzesz */}
+      {current.length === 0 && <p>Brak aktywnych rezerwacji.</p>}
+      {current.map((r) => (
+        <div key={r.id} className="reservation-card" style={{ marginBottom: 16 }}>
+          <p>
+            <strong>Produkt ID:</strong> {r.id}
+          </p>
+          <p>
+            <strong>Okres:</strong> {new Date(r.start_date).toLocaleDateString()} –{" "}
+            {new Date(r.end_date).toLocaleDateString()}
+          </p>
+          <p>
+            <strong>Status:</strong>{" "}
+            <span style={{ color: "green" }}>{r.status}</span>
+          </p>
+          <button onClick={() => cancelReservation(r.id)}>Anuluj rezerwację</button>
+        </div>
+      ))}
     </div>
   );
 };

@@ -196,6 +196,7 @@ async def create_category(category: _schemas.CategoryCreate, db: _orm.Session):
     new_cat = _models.Category(
         name=category.name,
         description=category.description,
+        image_path=category.image_path or "uploads/default_category.jpg"
     )
     db.add(new_cat)
     db.commit()

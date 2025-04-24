@@ -21,6 +21,9 @@ import { CartProvider } from "./contexts/CartContext";
 import Catalogue from "./pages/Catalogue";
 import ContactPage from "./pages/ContactPage";
 import Header from "./Header";
+import UserProfile from "./components/UserProfile";
+import UserHistory from "./components/UserHistory";
+import UserReservations from "./components/UserReservations";
 
 function App() {
   return (

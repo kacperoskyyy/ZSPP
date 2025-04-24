@@ -31,15 +31,6 @@ const AdminNavigation = () => {
         </header>
       );
     };
-    
-    // <header>
-    //   <nav>
-    //     <Link to="/">Strona główna</Link>
-    //     <Link to="/admin-panel">Panel administratora</Link>
-    //     <button onClick={logout}>Wyloguj się</button>
-    //   </nav>
-    // </header>
   
-
 
 export default AdminNavigation;

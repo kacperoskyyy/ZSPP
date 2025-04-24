@@ -1,7 +1,6 @@
-// src/UserNavigation.js
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "./contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const UserNavigation = () => {
   const { logout } = useAuth();
@@ -9,7 +8,7 @@ const UserNavigation = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/"); // Przekierowanie na stronę główną po wylogowaniu
+    navigate("/");
   };
 
   return (
@@ -24,7 +23,12 @@ const UserNavigation = () => {
           <li>
             <Link to="/user-profile">Profil</Link>
           </li>
-          {/* Możesz dodać kolejne linki */}
+          <li>
+            <Link to="/user-reservations">Moje rezerwacje</Link>
+          </li>
+          <li>
+            <Link to="/user-history">Historia</Link>
+          </li>
           <li>
             <button onClick={handleLogout} style={{ cursor: "pointer" }}>
               Wyloguj się
