@@ -19,7 +19,7 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
     id: int
-    gender: Optional[str]
+    gender: Optional[bool]
     birth_date: Optional[dt.date]
     created_at: dt.datetime
     role: str
@@ -54,8 +54,6 @@ class CategoryBase(_pydantic.BaseModel):
 
 
 class CategoryCreate(CategoryBase):
-    id: int
-
     class Config:
         orm_mode = True
 
