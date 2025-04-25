@@ -10,13 +10,30 @@ import os
 import datetime as _dt
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+from contextlib import asynccontextmanager
 
 import services as _services
 import schemas as _schemas
 import auth as _auth
 import models as _models
 
-app = _fastapi.FastAPI()
+# -------------------------
+# Uruchamianie aktualizacji wypożyczeń raz na dzień
+# -------------------------
+
+@asynccontextmanager
+async def lifespan(app: _fastapi.FastAPI):
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(
+        _services.expire_reservations,
+        CronTrigger(hour=0, minute=5),
+    )
+    scheduler.start()
+
+    yield
+    scheduler.shutdown()
+
+app = _fastapi.FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:3000",  # adres Twojej aplikacji React
@@ -38,15 +55,6 @@ if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
 
-# -------------------------
-# Uruchamianie aktualizacji wypożyczeń raz na dzień
-# -------------------------
-@app.on_event("startup")
-async def start_scheduler():
-    scheduler = AsyncIOScheduler()
-    # uruchamiaj codziennie o 00:05
-    scheduler.add_job(_services.expire_reservations, CronTrigger(hour=0, minute=10))
-    scheduler.start()
 
 # -------------------------
 # Publiczne endpointy
@@ -481,3 +489,13 @@ async def upload_equipment_image(
     new_image = await _services.create_equipment_image(image_data, db)
 
     return _schemas.EquipmentImageRead.model_validate(new_image)
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "main:app",
+        host="127.0.0.1",
+        port=8000,
+        reload=True
+    )
