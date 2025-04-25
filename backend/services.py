@@ -82,6 +82,24 @@ def get_db():
     finally:
         db.close()
 
+def expire_reservations() -> None:
+    db = _database.SessionLocal()
+    try:
+        now = _dt.datetime.now()
+        # wybieramy te, które trzeba zakończyć
+        to_expire = (
+            db.query(_models.Reservation)
+              .filter(_models.Reservation.end_date < now)
+              .filter(_models.Reservation.status.in_(["pending", "active"]))
+              .all()
+        )
+        for res in to_expire:
+            res.status = "completed"
+        if to_expire:
+            db.commit()
+    finally:
+        db.close()
+
 
 # --- USER SERVICES ---
 async def get_user_by_email(email: str, db: _orm.Session):
@@ -102,6 +120,8 @@ async def create_user(user: _schemas.UserCreate, db: _orm.Session):
         phone_number=user.phone_number,
         email=user.email,
         password_hash=_hash.bcrypt.hash(user.password),
+        gender=user.gender,
+        birth_date=user.birth_date,
     )
     db.add(user_obj)
     db.commit()
@@ -193,15 +213,17 @@ async def get_category_by_id(category_id: int, db: _orm.Session):
 
 
 async def create_category(category: _schemas.CategoryCreate, db: _orm.Session):
-    new_cat = _models.Category(
+    cat_obj = _models.Category(
         name=category.name,
         description=category.description,
         image_path=category.image_path or "uploads/default_category.jpg"
     )
-    db.add(new_cat)
+    print(cat_obj)
+    db.add(cat_obj)
     db.commit()
-    db.refresh(new_cat)
-    return _schemas.CategoryRead.model_validate(new_cat)
+    db.refresh(cat_obj)
+    print(cat_obj)
+    return cat_obj
 
 
 async def delete_category(category_id: int, db: _orm.Session):
@@ -248,7 +270,7 @@ async def create_equipment(equipment_data: _schemas.EquipmentCreate, db: _orm.Se
     db.add(new_equipment)
     db.commit()
     db.refresh(new_equipment)
-    return _schemas.EquipmentRead.model_validate(new_equipment)
+    return new_equipment
 
 
 # --- PAYMENTS ---

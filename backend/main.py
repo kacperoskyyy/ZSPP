@@ -8,6 +8,8 @@ from fastapi import BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import datetime as _dt
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 import services as _services
 import schemas as _schemas
@@ -35,6 +37,16 @@ UPLOAD_DIR = "public/uploads"
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
+
+# -------------------------
+# Uruchamianie aktualizacji wypożyczeń raz na dzień
+# -------------------------
+@app.on_event("startup")
+async def start_scheduler():
+    scheduler = AsyncIOScheduler()
+    # uruchamiaj codziennie o 00:05
+    scheduler.add_job(_services.expire_reservations, CronTrigger(hour=0, minute=10))
+    scheduler.start()
 
 # -------------------------
 # Publiczne endpointy
