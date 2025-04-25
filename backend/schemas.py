@@ -26,7 +26,7 @@ class UserRead(UserBase):
     profile_image: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UserUpdate(_pydantic.BaseModel):
@@ -55,14 +55,14 @@ class CategoryBase(_pydantic.BaseModel):
 
 class CategoryCreate(CategoryBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CategoryRead(CategoryBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # --- EQUIPMENT ---
@@ -78,7 +78,7 @@ class EquipmentImageRead(EquipmentImageBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class EquipmentBase(_pydantic.BaseModel):
@@ -100,7 +100,7 @@ class EquipmentRead(EquipmentBase):
     images: List[EquipmentImageRead] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # --- RESERVATION ---
@@ -120,7 +120,7 @@ class ReservationRead(ReservationBase):
     created_at: dt.datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # --- SUPPORT TICKET ---
@@ -138,7 +138,7 @@ class SupportTicketRead(SupportTicketBase):
     user_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # --- EQUIPMENT TRANSPORT ---
@@ -158,7 +158,7 @@ class EquipmentTransportRead(EquipmentTransportBase):
     updated_at: dt.datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # --- EQUIPMENT TRANSPORT ITEM ---
@@ -176,7 +176,7 @@ class EquipmentTransportItemRead(EquipmentTransportItemBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # --- PAYMENT ---
@@ -196,7 +196,7 @@ class PaymentRead(PaymentBase):
     created_at: dt.datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # --- REVIEW ---
@@ -216,7 +216,7 @@ class ReviewRead(ReviewBase):
     created_at: dt.datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # --- LOCATION ---
@@ -237,7 +237,7 @@ class LocationRead(LocationBase):
     updated_at: dt.datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class AdminReportBase(_pydantic.BaseModel):
@@ -257,4 +257,4 @@ class AdminReportRead(AdminReportBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
