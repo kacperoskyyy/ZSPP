@@ -1,57 +1,81 @@
+# seed_api.py
 import requests
 import datetime
 
-# 1. Konfiguracja
-BASE_URL = "http://localhost:8000"  # dostosuj port/adres, jeśli potrzebne
-ADMIN_EMAIL = "admin@admin.com"
-ADMIN_PASS = "admin"
+BASE_URL = "http://localhost:8000"   # dostosuj, jeśli to nie ten adres
+ADMIN_CREDENTIALS = {"username": "admin@admin.com", "password": "admin"}
+NEW_USER = {
+    "email": "userr@user.com",
+    "password": "userpass",
+    "first_name": "Jan",
+    "last_name": "Kowalski",
+    "phone_number": "600700800",
+    "gender": True,
+    "birth_date": "1995-05-15"
+}
 
-def login_admin():
+def login(creds):
     resp = requests.post(
         f"{BASE_URL}/api/login",
-        data={"username": ADMIN_EMAIL, "password": ADMIN_PASS},
+        data=creds,
         headers={"Content-Type": "application/x-www-form-urlencoded"}
     )
     resp.raise_for_status()
     token = resp.json()["access_token"]
     return {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
+def register_user():
+    resp = requests.post(
+        f"{BASE_URL}/api/register",
+        json=NEW_USER,
+        headers={"Content-Type": "application/json"}
+    )
+    print(resp.json())
+    resp.raise_for_status()
+    data = resp.json()
+    print("▷ Zarejestrowano usera:", data["user"])
+    return {"Authorization": f"Bearer {data['access_token']}", "Content-Type": "application/json"}
+
+def create_locations(headers):
+    locs = [
+        {"contact_number":"111222333","street":"Główna","house_number":"1","city":"Warszawa"},
+        {"contact_number":"444555666","street":"Drugorzędna","house_number":"2","city":"Kraków"},
+    ]
+    created = []
+    for loc in locs:
+        r = requests.post(f"{BASE_URL}/api/admin/locations", json=loc, headers=headers)
+        r.raise_for_status()
+        created.append(r.json())
+        print("▷ Dodano lokalizację:", r.json())
+    return created
+
 def create_categories(headers):
     cats = [
-        {"name": "Rower","image_path":"./public/uploads/d.png", "description": "Sprzęt rowerowy do jazdy terenowej"},
-        {"name": "Narty", "image_path":"./public/uploads/d.png","description": "Sprzęt zimowy – narty i buty narciarskie"},
-        {"name": "Kajak", "image_path":"./public/uploads/d.png","description": "Sprzęt wodny – kajaki i akcesoria"},
+        {"name":"Rower","image_path":"uploads/default_category.jpg","description":"Sprzęt rowerowy"},
+        {"name":"Narty","image_path":"uploads/default_category.jpg","description":"Sprzęt zimowy"},
+        {"name":"Kajak","image_path":"uploads/default_category.jpg","description":"Sprzęt wodny"},
     ]
     created = []
     for c in cats:
         r = requests.post(f"{BASE_URL}/api/admin/categories", json=c, headers=headers)
         r.raise_for_status()
         created.append(r.json())
-        print("Utworzono kategorię:", r.json())
+        print("▷ Dodano kategorię:", r.json())
     return created
 
 def create_equipment(headers, categories):
     items = [
         {
-            "name": "Rower górski MTB X200",
-            "description": "Wytrzymała rama, pełne zawieszenie, do trudnego terenu.",
-            "category_id": categories[0]["id"],
-            "price_per_day": 120.00,
-            "available_quantity": 5,
+            "name":"MTB X200","description":"Pełne zawieszenie","category_id":categories[0]["id"],
+            "price_per_day":120.0,"available_quantity":5
         },
         {
-            "name": "Narty zjazdowe Rossignol",
-            "description": "Długość 170 cm, wiązania Marker.",
-            "category_id": categories[1]["id"],
-            "price_per_day": 85.00,
-            "available_quantity": 8,
+            "name":"Rossignol Z17","description":"Narty 170 cm","category_id":categories[1]["id"],
+            "price_per_day":85.0,"available_quantity":8
         },
         {
-            "name": "Kajak jednoosobowy Sea kayak",
-            "description": "Lekki, łatwy do transportu, wytrzymały plastik.",
-            "category_id": categories[2]["id"],
-            "price_per_day": 60.00,
-            "available_quantity": 3,
+            "name":"Sea kayak","description":"Jednoosobowy kajak","category_id":categories[2]["id"],
+            "price_per_day":60.0,"available_quantity":3
         },
     ]
     created = []
@@ -59,109 +83,57 @@ def create_equipment(headers, categories):
         r = requests.post(f"{BASE_URL}/api/admin/equipment", json=it, headers=headers)
         r.raise_for_status()
         created.append(r.json())
-        print("Utworzono equipment:", r.json())
+        print("▷ Dodano sprzęt:", r.json())
     return created
 
-def create_reservation(headers):
-    # Pobranie danych bieżącego (admin) użytkownika
-    me = requests.get(f"{BASE_URL}/api/users/me", headers=headers)
-    me.raise_for_status()
-    user = me.json()
-
-    # Przygotowanie dat
+def create_reservation_and_payment(headers):
+    # przygotuj daty
     start = datetime.datetime.now() + datetime.timedelta(days=1)
-    end = start + datetime.timedelta(days=3)
+    end   = start + datetime.timedelta(days=3)
     payload = {
         "start_date": start.isoformat(),
-        "end_date": end.isoformat(),
-        "status": "pending"
+        "end_date":   end.isoformat(),
+        "status":     "pending"
     }
-    # Tworzymy rezerwację
+    # rezerwacja
     r = requests.post(f"{BASE_URL}/api/reservations", json=payload, headers=headers)
     r.raise_for_status()
-    print("Utworzono rezerwację:", r.json())
-    return r.json()
+    res = r.json()
+    print("▷ Stworzono rezerwację:", res)
+    # płatność
+    total_amount = sum(item["price_per_day"] * ( (end-start).days ) for item in [res]) \
+                   if False else 0  # tu możesz obliczyć sumę, albo wiesz, wpisz kwotę ręcznie
+    pay_payload = {
+        "reservation_id": res["id"],
+        "amount": total_amount or 100.0,
+        "payment_method": "card"
+    }
+    p = requests.post(f"{BASE_URL}/api/payments", json=pay_payload, headers=headers)
+    p.raise_for_status()
+    print("▷ Wystawiono płatność:", p.json())
+    return res
 
 def main():
-    print("Logowanie jako admin…")
-    headers = login_admin()
+    # 1) Zaloguj admina
+    admin_headers = login(ADMIN_CREDENTIALS)
 
-    print("\nTworzenie kategorii…")
-    cats = create_categories(headers)
+    # 2) Zarejestruj usera (i pobierz token)
+    user_headers = register_user()
 
-    print("\nTworzenie sprzętu…")
-    eq = create_equipment(headers, cats)
+    # 3) Tworzenie lokacji / kategorii / sprzętu jako admin
+    create_locations(admin_headers)
+    cats = create_categories(admin_headers)
+    create_equipment(admin_headers, cats)
 
-    print("\nTworzenie przykładowej rezerwacji…")
-    res = create_reservation(headers)
+    # 4) Rezerwacja + płatność: dla admina
+    print("\n— Admin tworzy rezerwację:")
+    create_reservation_and_payment(admin_headers)
 
-    print("\nGotowe! Dane testowe zostały wprowadzone.")
+    # 5) Rezerwacja + płatność: dla usera
+    print("\n— User tworzy rezerwację:")
+    create_reservation_and_payment(user_headers)
+
+    print("\n✅ Seed API zakończony.")
 
 if __name__ == "__main__":
     main()
-#
-# from database import SessionLocal, engine, Base
-# import models
-# import datetime
-#
-# def seed():
-#     # 1) Upewnij się, że wszystkie tabele są utworzone
-#     Base.metadata.create_all(bind=engine)
-#
-#     db = SessionLocal()
-#     try:
-#         # --- Categories ---
-#         cats = [
-#             models.Category(name="Rower", description="Sprzęt rowerowy", image_path="uploads/rower.jpg"),
-#             models.Category(name="Narty", description="Sprzęt zimowy", image_path="uploads/narty.jpg"),
-#             models.Category(name="Kajak", description="Sprzęt wodny", image_path="uploads/kajak.jpg"),
-#         ]
-#         db.add_all(cats)
-#         db.commit()
-#
-#         # --- Equipment ---
-#         eqs = [
-#             models.Equipment(
-#                 name="MTB X200",
-#                 description="Pełne zawieszenie, terenowy",
-#                 category_id=cats[0].id,
-#                 price_per_day=120.00,
-#                 available_quantity=5
-#             ),
-#             models.Equipment(
-#                 name="Rossignol Z17",
-#                 description="Narty zjazdowe 170 cm",
-#                 category_id=cats[1].id,
-#                 price_per_day=85.00,
-#                 available_quantity=8
-#             ),
-#             models.Equipment(
-#                 name="Sea kayak 1-os",
-#                 description="Lekki kajak plastikowy",
-#                 category_id=cats[2].id,
-#                 price_per_day=60.00,
-#                 available_quantity=3
-#             ),
-#         ]
-#         db.add_all(eqs)
-#         db.commit()
-#
-#         # --- Reservation (załóżmy, że admin ma id=1) ---
-#         start = datetime.datetime.now() + datetime.timedelta(days=1)
-#         end = start + datetime.timedelta(days=3)
-#         reservation = models.Reservation(
-#             user_id=2,
-#             start_date=start,
-#             end_date=end,
-#             status="pending"
-#         )
-#         db.add(reservation)
-#         db.commit()
-#
-#         print("✅ Seedowanie zakończone pomyślnie!")
-#
-#     finally:
-#         db.close()
-#
-# if __name__ == "__main__":
-#     seed()
