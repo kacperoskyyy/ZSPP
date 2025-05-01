@@ -16,6 +16,10 @@ const UserNavigation = () => {
         {/* <button onClick={logout}>Wyloguj się</button>8?} */}
       </div>
       <div className="User-Nav-Right">
+      <Link className="Profile" to="/Catalogue">
+        <img src="/Store.png" alt="koszyk" className="NavIcon" />
+        <span>Sklep</span>
+        </Link>
       <Link className="Profile" to="/user-dashboard">
         <img src="/gregory.png" alt="koszyk" className="NavIcon" />
         <span>Panel użytkownika</span>

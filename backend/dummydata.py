@@ -118,20 +118,20 @@ def main():
     admin_headers = login(ADMIN_CREDENTIALS)
 
     # 2) Zarejestruj usera (i pobierz token)
-    user_headers = register_user()
+    # user_headers = register_user()
 
     # 3) Tworzenie lokacji / kategorii / sprzętu jako admin
-    create_locations(admin_headers)
+    # create_locations(admin_headers)
     cats = create_categories(admin_headers)
     create_equipment(admin_headers, cats)
 
     # 4) Rezerwacja + płatność: dla admina
     print("\n— Admin tworzy rezerwację:")
-    create_reservation_and_payment(admin_headers)
+    # create_reservation_and_payment(admin_headers)
 
     # 5) Rezerwacja + płatność: dla usera
     print("\n— User tworzy rezerwację:")
-    create_reservation_and_payment(user_headers)
+    # create_reservation_and_payment(user_headers)
 
     print("\n✅ Seed API zakończony.")
 
