@@ -5,7 +5,7 @@
 
 .sidebar {
   width: 200px;
-  background: #f7f7f7;
+  background: white;
   padding: 1rem;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .sidebar button {
-  display: block;
+  display: flex;
   width: 100%;
   margin: 0.5rem 0;
   padding: 0.5rem;
@@ -33,7 +33,7 @@
 .main-panel {
   flex: 1;
   padding: 1rem;
-  background: #fff;
+  background: lightgray;
 }
 
 .admin-table {

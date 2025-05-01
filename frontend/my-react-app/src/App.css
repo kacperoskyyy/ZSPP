@@ -383,7 +383,13 @@
   justify-content: space-between;
   align-items: center;
 }
-
+.MainPage {
+  text-decoration: none;
+}
+.LOGO {
+  font-size: 48px;
+  color:black;
+}
 .User-Nav-Left {
   display: flex;
   align-items: center;
@@ -441,6 +447,7 @@
 .sidebar-menu {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 /* Ikony górne */
@@ -545,6 +552,16 @@
   border-right: 1px solid #ccc;
   padding: 1rem;
   background-color: #f7f7f7;
+}
+.menu-button {
+  display: flex;
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
 }
 
 /* Menu title */
