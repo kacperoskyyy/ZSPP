@@ -74,6 +74,7 @@ const Catalogue = () => {
   return (
     <div className="catalogue-page">
       <aside className="catalogue-sidebar">
+      <div className="filter-group">
         <label>
           Sortuj
           <select value={sort} onChange={(e) => setSort(e.target.value)}>
@@ -84,6 +85,8 @@ const Catalogue = () => {
             ))}
           </select>
         </label>
+        </div>
+        <div className="filter-group">
         <label>
           Kategorie
           <select
@@ -98,8 +101,11 @@ const Catalogue = () => {
             ))}
           </select>
         </label>
-        <fieldset>
-          <legend>Cena (zł)</legend>
+        </div>
+        <div className="filter-group price-range">
+          
+          <label>Cena (zł)</label>
+          <div className="price-inputs">
           <input
             type="number"
             placeholder="Min"
@@ -113,8 +119,41 @@ const Catalogue = () => {
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
           />
-        </fieldset>
-      </aside>
+          </div>
+          </div>
+        
+          <div className="filter-group-checkbox">
+        <label>Dostępność w punkcie</label>
+        <ul className="checkbox-list">
+          <li>
+            <label className="checkbox-label"> 
+            <input
+                type="checkbox"
+                name="location1"
+                />Andrychów
+            </label>    
+          </li>
+          
+          <li>
+            <label className="checkbox-label"> 
+            <input
+                type="checkbox"
+                name="location2"               
+              />CIsiec
+              </label>
+          </li>
+          
+          <li>
+            <label  className="checkbox-label">  
+            <input
+                type="checkbox"
+                name="location3"               
+              />Kęty
+            </label>
+          </li>
+        </ul>
+      </div>
+    </aside>
 
       <main className="catalogue-main">
         {filtered.map((item) => (
@@ -123,7 +162,7 @@ const Catalogue = () => {
               className="catalogue-img"
               src={
                 (item.images && item.images[0]?.image_path) ||
-                "/placeholder.jpg"
+                "/gregory.png"
               }
               alt={item.name}
             />

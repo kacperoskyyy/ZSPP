@@ -5,14 +5,14 @@
 
 .catalogue-sidebar {
   width: 250px;
-  background: #f7f7f7;
+  background: white;
   padding: 1rem;
   box-sizing: border-box;
 }
 
 .catalogue-sidebar label,
 .catalogue-sidebar fieldset {
-  display: block;
+  display: flex;
   margin-bottom: 1rem;
 }
 
@@ -22,11 +22,13 @@
 }
 
 .catalogue-main {
-  flex: 1;
+  
   padding: 1rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
+  height: 50%;
+ background-color: lightgrey;
 }
 
 .catalogue-card {
@@ -35,6 +37,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  
 }
 
 .catalogue-card img {
@@ -61,4 +64,128 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+
+/*
+*/
+.filter-group {
+  margin-bottom: 24px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Select z własną strzałką */
+.filter-group select {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: lightgray;
+  font-size: 0.9rem;
+  appearance: none;           /* usuwa domyślną */
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D'10'%20height%3D'6'%20xmlns%3D'http://www.w3.org/2000/svg'%3E%3Cpath%20d%3D'M0%200l5%206%206-6'%20stroke%3D'%23666'%20fill%3D'none'%20stroke-width%3D'1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 0.2s;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.price-range .price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-range input[type="number"] {
+  width: 48%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: lightgrey;
+}
+
+/* Lista checkboxów */
+.checkbox-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position:absolute;
+}
+
+/* 
+.checkbox-list li {
+  margin-bottom: 8px;
+}
+
+.checkbox-list input {
+  margin-right: 6px;
+  accent-color: #007bff; 
+}
+
+.checkbox-list li {
+  margin-bottom: 12px; 
+  
+}
+
+/* Sprawiamy, że label to flex-box w jednym wierszu 
+.checkbox-list li label {
+   display: inline-flex;
+  align-items:start ; 
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Trochę przestrzeni między checkboxem a tekstem 
+.checkbox-list li label input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: #007bff;
+} 
+*/
+.sidebar-filter-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Każdy <li> bez dodatkowego przesunięcia */
+.sidebar-filter-list li {
+  margin-bottom: 0.75rem; /* odstęp między wierszami */
+  padding: 0;
+}
+
+/* Etykieta jako flex-box: checkbox + tekst w jednej linii */
+.filter-group .checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  /* możesz tu ustawić font, kolor itp */
+}
+
+/* Checkbox po lewej, a tekst zawsze w tej samej pozycji */
+.checkbox-label input[type="checkbox"] {
+  margin: 0;            /* zerujemy wszelkie domyślne marginesy */
+  margin-right: 0.5rem; /* odstęp między boxem a tekstem */
+  flex-shrink: 0;       /* nie pozwala checkboxowi się kurczyć */
+}
+
+/* Tekst wewnątrz <span> – zawsze wyrównany względem checkboxa */
+.checkbox-label span {
+  line-height: 1.2;     /* upewnia się, że tekst jest wycentrowany pionowo */
+  white-space: nowrap;  /* zapobiega łamaniu słów w dziwnych miejscach */
+}
+.filter-group-checkbox {
+  position: absolute;
 }
