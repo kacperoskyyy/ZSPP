@@ -1,5 +1,6 @@
 // src/pages/admin/ManageUsers.js
 import React, { useState, useEffect } from "react";
+import CompositeButtons from "../../components/CompositeButtons";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -28,6 +29,7 @@ const ManageUsers = () => {
             <th>Imię</th>
             <th>Nazwisko</th>
             <th>Rola</th>
+            <th>Akcja</th>
           </tr>
         </thead>
         <tbody>
@@ -38,6 +40,7 @@ const ManageUsers = () => {
               <td>{u.first_name}</td>
               <td>{u.last_name}</td>
               <td>{u.role}</td>
+              <td><CompositeButtons/></td>
             </tr>
           ))}
         </tbody>

@@ -1,5 +1,6 @@
 // src/pages/admin/ManageEquipment.js
 import React, { useState, useEffect } from "react";
+import ButtonPanel from "../../components/ButtonPanel";
 
 const ManageEquipment = () => {
   const [items, setItems] = useState([]);
@@ -16,7 +17,34 @@ const ManageEquipment = () => {
 
   return (
     <div>
-      <h2>Zarządzaj sprzętem</h2>
+      <h2>Zarządzanie kategoriami sprzętu</h2>
+      <ButtonPanel 
+      iconSrc="/category.png"
+      label="Lista kategorii sprzętu"
+      onClick={() => { /* funkcja */ }}
+    />
+    <h2>Zarządznie sprzętem</h2>
+    <ButtonPanel 
+      iconSrc="/sport.png"
+      label="Lista dostępnego sprzętu sportowego"
+      onClick={() => { /* funkcja */ }}
+    />
+    <ButtonPanel 
+      iconSrc="/pin.png"
+      label="Lista sprzętu dostępnego w lokalizacjach"
+      onClick={() => { /* funkcja */ }}
+    />
+    <br/>
+    <ButtonPanel 
+      iconSrc="/sport.png"
+      label="Dodawanie sprzętu sportowego"
+      onClick={() => { /* funkcja */ }}
+    />
+    <ButtonPanel 
+      iconSrc="/location.png"
+      label="Transport między punktami"
+      onClick={() => { /* funkcja */ }}
+    />
       <table className="admin-table">
         <thead>
           <tr>

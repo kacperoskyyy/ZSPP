@@ -1,5 +1,6 @@
 // src/pages/admin/ManageCategories.js
 import React, { useState, useEffect } from "react";
+import CompositeButtons from "../../components/CompositeButtons";
 
 const ManageCategories = () => {
   const [cats, setCats] = useState([]);
@@ -24,6 +25,7 @@ const ManageCategories = () => {
             <th>ID</th>
             <th>Nazwa</th>
             <th>Opis</th>
+            <th>Ackja</th>
           </tr>
         </thead>
         <tbody>
@@ -32,6 +34,7 @@ const ManageCategories = () => {
               <td>{c.id}</td>
               <td>{c.name}</td>
               <td>{c.description || "-"}</td>
+              <td><CompositeButtons/></td>
             </tr>
           ))}
         </tbody>

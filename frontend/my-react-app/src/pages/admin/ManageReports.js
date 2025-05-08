@@ -1,6 +1,7 @@
 // src/pages/admin/ManageReports.js
 import React, { useState, useEffect } from "react";
 import ButtonPanel from "../../components/ButtonPanel";
+import CompositeButtons from "../../components/CompositeButtons";
 
 const ManageReports = () => {
   const [reps, setReps] = useState([]);
@@ -18,15 +19,38 @@ const ManageReports = () => {
   return (
     <div>
       <h2>Raporty ogólne</h2>
-      <ButtonPanel
-        iconSrc="public/money.png"
-        label="Wygeneruj pełny raport finansowy"
-        onClick={null}
+
+    <ButtonPanel 
+      iconSrc="/money.png"
+      label="Wygeneruj pełny raport finansowy"
+      onClick={() => { /* funkcja */ }}
     />
     <ButtonPanel
-        iconSrc="public/money.png"
+        iconSrc="/pin.png"
         label="Wygeneruj raport z podsumowanie każdej lokalizacji"
-        onClick={null}
+        onClick={() => { /* funkcja */ }}
+    />
+    <h2>Raporty dla lokalizacji</h2>
+    <ButtonPanel
+        iconSrc="/money.png"
+        label="Wygeneruj raport finansowy dla lokalizacji"
+        onClick={() => { /* funkcja */ }}
+    />
+    <ButtonPanel
+        iconSrc="/pin.png"
+        label="Wygeneruj raport wypozyczeń dla lokalizacji"
+        onClick={() => { /* funkcja */ }}
+    />
+    <h2>Raporty użytkowników</h2>
+    <ButtonPanel
+        iconSrc="/profile.png"
+        label="Wygeneruj raport wypozyczeń użytkowników"
+        onClick={() => { /* funkcja */ }}
+    />
+    <ButtonPanel
+        iconSrc="/profile.png"
+        label="Wygeneruj raport pracowników"
+        onClick={() => { /* funkcja */ }}
     />
 
       <table className="admin-table">
@@ -36,6 +60,7 @@ const ManageReports = () => {
             <th>Typ</th>
             <th>Tytuł</th>
             <th>Okres</th>
+            <th>Akcja</th>
           </tr>
         </thead>
         <tbody>
@@ -48,6 +73,7 @@ const ManageReports = () => {
                 {new Date(r.start_date).toLocaleDateString()} –{" "}
                 {new Date(r.end_date).toLocaleDateString()}
               </td>
+              <td><CompositeButtons/></td>
             </tr>
           ))}
         </tbody>
