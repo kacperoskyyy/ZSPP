@@ -40,7 +40,10 @@ const ManageUsers = () => {
               <td>{u.first_name}</td>
               <td>{u.last_name}</td>
               <td>{u.role}</td>
-              <td><CompositeButtons/></td>
+              <td><CompositeButtons onButtonOneClick={() => {}} 
+              onButtonTwoClick={() => {}}
+              onButtonThreeClick={() => {}}
+              /></td>
             </tr>
           ))}
         </tbody>
