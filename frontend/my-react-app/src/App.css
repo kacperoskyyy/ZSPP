@@ -18,7 +18,7 @@
 .App-Nav {
   display: flex;
   justify-content: end;
-  gap: 30px;
+  /* gap: 30px; */
   margin-right: 15px;
   font-size: large;
   padding: 0px 5px;
@@ -35,6 +35,10 @@
   border: none;
   cursor: pointer;
   transition: 0.3s;
+}
+.App-Button-Nav:hover {
+  background-color: #007bff;
+
 }
 
 .Welcome-Page {
@@ -117,6 +121,7 @@
   gap: 20px;
   max-width: 1100px;
   margin: 0 auto;
+  margin-top: 30px;
 }
 
 /* pojedynczy element galerii */
@@ -179,6 +184,19 @@
   align-items: center;
   margin: 20px 0;
 }
+
+/* domyślnie chowamy nawigację */
+.Navigation {
+  display: none;
+}
+
+/* od razu do 767px (mobile) pokazujemy ją ponownie */
+@media (max-width: 767px) {
+  .Navigation {
+    display: block;  /* lub flex, jeśli potrzebujesz flexowego układu */
+  }
+}
+
 .Navigation a {
   text-decoration: none;
   color: black;
@@ -723,4 +741,78 @@
   margin-bottom: 5px;
   width: 64px;
   height: 64px;
+}
+
+/* okno karuzeli (clip) */
+.carousel-wrapper {
+  position: relative;
+  margin: 0 auto;
+}
+
+/* container z overflow hidden */
+.carousel-window {
+  overflow: hidden;
+}
+
+/* pasek wszystkich kart w jednym wierszu */
+.carousel-container {
+  display: flex;
+  flex-wrap: nowrap;
+  width: fit-content;
+}
+
+/* pojedyncza karta */
+.carousel-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 10px;
+}
+
+/* obrazek w karcie */
+.carousel-card__img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* tekst pod obrazkiem */
+.carousel-card__info {
+  margin-top: 8px;
+  font-size: 1rem;
+}
+
+/* przyciski nawigacyjne */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* wyłączony stan */
+.carousel-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* strzałka lewa/prawa */
+.carousel-arrow--left {
+  left: -16px;  /* dostosuj, żeby nie nachodziła na karty */
+}
+.carousel-arrow--right {
+  right: -16px;
 }
