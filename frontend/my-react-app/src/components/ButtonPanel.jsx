@@ -1,28 +1,15 @@
 import React from 'react';
-
+import "./ButtonPanel.css";
 
 const ButtonPanel = ({ iconSrc, label, onClick }) => {
   return (
-    <button
-      onClick={onClick}
-      className="mr-[60px] w-40 h-40 flex flex-col items-center justify-between p-4 rounded-lg bg-white shadow hover:bg-gray-100 transition text-center"
-    >
-      <div className="w-16 h-16 overflow-hidden flex items-center justify-center">
-        <img
-          src={iconSrc}
-          alt="Ikona"
-          className="w-64 h-64 object-contain"
-        />
+    <button onClick={onClick} className="button-panel">
+      <div className="button-panel-icon-wrapper">
+        <img src={iconSrc} alt="Ikona" className="button-panel-icon" />
       </div>
-      <span className="text-base font-medium leading-tight">
-        {label}
-      </span>
+      <span className="button-panel-label">{label}</span>
     </button>
   );
 };
-
-
-
-
 
 export default ButtonPanel;

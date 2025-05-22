@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ButtonPanel from "../../components/ButtonPanel";
 import CompositeButtons from "../../components/CompositeButtons";
+import './ManageEquipment.css';
 
 const ManageReports = () => {
   const [reps, setReps] = useState([]);
@@ -17,9 +18,10 @@ const ManageReports = () => {
   }, []);
 
   return (
+    <>
     <div>
       <h2>Raporty ogólne</h2>
-
+      <div class="butttons-next-to">
     <ButtonPanel 
       iconSrc="/money.png"
       label="Wygeneruj pełny raport finansowy"
@@ -30,7 +32,9 @@ const ManageReports = () => {
         label="Wygeneruj raport z podsumowanie każdej lokalizacji"
         onClick={() => { /* funkcja */ }}
     />
+    </div>
     <h2>Raporty dla lokalizacji</h2>
+    <div class="butttons-next-to">
     <ButtonPanel
         iconSrc="/money.png"
         label="Wygeneruj raport finansowy dla lokalizacji"
@@ -41,7 +45,9 @@ const ManageReports = () => {
         label="Wygeneruj raport wypozyczeń dla lokalizacji"
         onClick={() => { /* funkcja */ }}
     />
+    </div>
     <h2>Raporty użytkowników</h2>
+    <div class="butttons-next-to">
     <ButtonPanel
         iconSrc="/profile.png"
         label="Wygeneruj raport wypozyczeń użytkowników"
@@ -52,6 +58,7 @@ const ManageReports = () => {
         label="Wygeneruj raport pracowników"
         onClick={() => { /* funkcja */ }}
     />
+    </div>
 
       <table className="admin-table">
         <thead>
@@ -79,6 +86,7 @@ const ManageReports = () => {
         </tbody>
       </table>
     </div>
+    </>
   );
 };
 

@@ -1,44 +1,29 @@
 import React from 'react';
+import './CompositeButtons.css';
 
 const IconButton = ({ iconSrc, onClick }) => (
-  <button
-    onClick={onClick}
-    className="w-12 h-12 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition"
-  >
-    <img
-      src={iconSrc}
-      alt=""
-      className="w-16 h-16 object-contain"
-    />
+  <button onClick={onClick} className="icon-button">
+    <img src={iconSrc} alt="" className="icon-image" />
   </button>
 );
+
 const ButtonOne = ({ onClick }) => (
-    <IconButton
-      iconSrc="/info.png"
-      onClick={onClick}
-    />
-  );
+  <IconButton iconSrc="/info.png" onClick={onClick} />
+);
 
 const ButtonTwo = ({ onClick }) => (
-  <IconButton
-    iconSrc="/edit.png"
-    onClick={onClick}
-  />
+  <IconButton iconSrc="/edit.png" onClick={onClick} />
 );
 
 const ButtonThree = ({ onClick }) => (
-  <IconButton
-    iconSrc="/delete.png"
-    onClick={onClick}
-  />
+  <IconButton iconSrc="/delete.png" onClick={onClick} />
 );
 
-
-const CompositeButtons = ({ onButtonOneClick, onButtonTwoClick,onButtonThreeClick }) => (
-  <div className="flex space-x-[10px]">
+const CompositeButtons = ({ onButtonOneClick, onButtonTwoClick, onButtonThreeClick }) => (
+  <div className="button-container">
     <ButtonOne onClick={onButtonOneClick} />
     <ButtonTwo onClick={onButtonTwoClick} />
-    <ButtonThree onclick={onButtonThreeClick} />
+    <ButtonThree onClick={onButtonThreeClick} />
   </div>
 );
 
