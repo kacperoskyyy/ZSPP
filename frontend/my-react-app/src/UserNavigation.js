@@ -11,7 +11,7 @@ const UserNavigation = () => {
     <header className="User-Header-Nav">
       <div className="User-Nav-Left">
         <Link className="MainPage" to="/">
-        <span>WSS</span>
+        <a className="LOGO">WSS</a>
         </Link>
         {/* <button onClick={logout}>Wyloguj się</button>8?} */}
       </div>

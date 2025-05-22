@@ -21,54 +21,55 @@ const AdminDashboard = () => {
     <div className="dashboard-container">
       <aside className="sidebar">
         <h3>Menu Admina</h3>
-        <ul>
+        <ul className="sidebar-menu">
           <li>
-            <button
-              className={activeTab === "dashboard" ? "active" : ""}
-              onClick={() => setActiveTab("dashboard")}
-            >
+            <button             
+              className={`menu-button ${activeTab === "dashboard" ? "active" : ""}`}
+              onClick={() => setActiveTab("dashboard")}>
+              <img src= "/chart.png" alt="Profil" className="menu-icon" />
+            
               Panel główny
             </button>
           </li>
           <li>
             <button
-              className={activeTab === "users" ? "active" : ""}
-              onClick={() => setActiveTab("users")}
-            >
+              className={`menu-button ${activeTab === "users" ? "active" : ""}`}
+              onClick={() => setActiveTab("users")}>
+              <img src= "/profile.png" alt="Profil" className="menu-icon" />
               Zarządzaj użytkownikami
             </button>
           </li>
           <li>
-            <button
-              className={activeTab === "categories" ? "active" : ""}
-              onClick={() => setActiveTab("categories")}
-            >
+            <button              
+              className={`menu-button ${activeTab === "categories" ? "active" : ""}`}
+              onClick={() => setActiveTab("categories")}>
+                <img src= "/category.png" alt="Profil" className="menu-icon" />
               Zarządzaj kategoriami
             </button>
           </li>
           <li>
             <button
-              className={activeTab === "equipment" ? "active" : ""}
-              onClick={() => setActiveTab("equipment")}
-            >
+              className={`menu-button ${activeTab === "equipment" ? "active" : ""}`}
+              onClick={() => setActiveTab("equipment")}>
+                <img src= "/store.png" alt="Profil" className="menu-icon" />
               Zarządzaj sprzętem
             </button>
           </li>
           <li>
             <button
-              className={activeTab === "reports" ? "active" : ""}
-              onClick={() => setActiveTab("reports")}
-            >
+              className={`menu-button ${activeTab === "reports" ? "active" : ""}`}
+              onClick={() => setActiveTab("reports")}>
+                <img src= "/info.png" alt="Profil" className="menu-icon" />
               Raporty
             </button>
           </li>
           <li>
-            <button
+            <button className="menu-button"
               onClick={() => {
                 logout();
                 navigate("/");
-              }}
-            >
+              }}>
+                <img src= "/logout.png" alt="Profil" className="menu-icon" />
               Wyloguj się
             </button>
           </li>
