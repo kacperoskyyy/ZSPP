@@ -79,35 +79,38 @@ const AdminDashboard = () => {
       <main className="main-panel">
         {activeTab === "dashboard" && (
           <div className="dashboard-home">
-            <h2>Panel główny admina</h2>
-            <p>
-              <strong>ID:</strong> {displayField(user.id)}
-            </p>
-            <p>
-              <strong>Email:</strong> {displayField(user.email)}
-            </p>
-            <p>
-              <strong>Imię:</strong> {displayField(user.first_name)}
-            </p>
-            <p>
-              <strong>Nazwisko:</strong> {displayField(user.last_name)}
-            </p>
-            <p>
-              <strong>Rola:</strong> {displayField(user.role)}
-            </p>
-            <p>
-              <strong>Profilowe:</strong>{" "}
-              {user.profile_image ? (
-                <img
-                  src={`/${user.profile_image}`}
-                  alt="Profilowe"
-                  className="profile-img"
-                />
-              ) : (
-                "Brak"
-              )}
-            </p>
+          <h2>Panel główny admina</h2>
+          <div className="dashboard-info">
+            <div className="info-row">
+              <strong className="info-label">ID:</strong>
+              <span className="info-value">{displayField(user.id)}</span>
+            </div>
+            <div className="info-row">
+              <strong className="info-label">Email:</strong>
+              <span className="info-value">{displayField(user.email)}</span>
+            </div>
+            <div className="info-row">
+              <strong className="info-label">Imię:</strong>
+              <span className="info-value">{displayField(user.first_name)}</span>
+            </div>
+            <div className="info-row">
+              <strong className="info-label">Nazwisko:</strong>
+              <span className="info-value">{displayField(user.last_name)}</span>
+            </div>
+            <div className="info-row">
+              <strong className="info-label">Rola:</strong>
+              <span className="info-value">{displayField(user.role)}</span>
+            </div>
+            <div className="info-row">
+              <strong className="info-label">Profilowe:</strong>
+              <span className="info-value">
+                {user.profile_image
+                  ? <img src={`/${user.profile_image}`} alt="Profilowe" className="profile-img" />
+                  : "Brak"}
+              </span>
+            </div>
           </div>
+        </div>        
         )}
         {activeTab === "users" && <ManageUsers />}
         {activeTab === "categories" && <ManageCategories />}
