@@ -24,6 +24,7 @@ import Header from "./Header";
 import UserProfile from "./components/UserProfile";
 import UserHistory from "./components/UserHistory";
 import UserReservations from "./components/UserReservations";
+import Basket from "./pages/user/Basket";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
               <Route path="/login" element={<LogIn />} />
               <Route path="/register" element={<Register />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/Basket" element={<Basket />} />
 
               <Route
                 path="/user-dashboard"
