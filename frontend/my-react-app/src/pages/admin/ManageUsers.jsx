@@ -28,6 +28,20 @@ const ManageUsers = () => {
     fetchUsers();
   }, []);
 
+  const refreshUsers = async () => {
+    const token = localStorage.getItem("access_token");
+    try {
+      const response = await fetch("/api/admin/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error("Brak dostępu");
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Błąd pobierania użytkowników:", error);
+    }
+  };
+
   const handleViewChange = (view, user) => {
     setSelectedUser(user);
     setActiveView(view);
@@ -45,7 +59,7 @@ const ManageUsers = () => {
 
   if (activeView === "info") return <ManageUserInfo user={selectedUser} onBack={showList} />;
   if (activeView === "edit") return <ManageUserEdit user={selectedUser} onBack={showList} />;
-  if (activeView === "delete") return <ManageUserDelete user={selectedUser} onBack={showList} />;
+  if (activeView === "delete") return <ManageUserDelete user={selectedUser} onBack={showList} onDelete={refreshUsers}/>;
 
   return (
     <div className="admin-panel">
