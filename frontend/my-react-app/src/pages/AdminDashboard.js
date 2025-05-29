@@ -82,27 +82,27 @@ const AdminDashboard = () => {
           <h2>Panel główny admina</h2>
           <div className="dashboard-info">
             <div className="info-row">
-              <strong className="info-label">ID:</strong>
+              <strong className="info-label">ID: </strong>
               <span className="info-value">{displayField(user.id)}</span>
             </div>
             <div className="info-row">
-              <strong className="info-label">Email:</strong>
+              <strong className="info-label">Email: </strong>
               <span className="info-value">{displayField(user.email)}</span>
             </div>
             <div className="info-row">
-              <strong className="info-label">Imię:</strong>
+              <strong className="info-label">Imię: </strong>
               <span className="info-value">{displayField(user.first_name)}</span>
             </div>
             <div className="info-row">
-              <strong className="info-label">Nazwisko:</strong>
+              <strong className="info-label">Nazwisko: </strong>
               <span className="info-value">{displayField(user.last_name)}</span>
             </div>
             <div className="info-row">
-              <strong className="info-label">Rola:</strong>
+              <strong className="info-label">Rola: </strong>
               <span className="info-value">{displayField(user.role)}</span>
             </div>
             <div className="info-row">
-              <strong className="info-label">Profilowe:</strong>
+              <strong className="info-label">Profilowe: </strong>
               <span className="info-value">
                 {user.profile_image
                   ? <img src={`/${user.profile_image}`} alt="Profilowe" className="profile-img" />

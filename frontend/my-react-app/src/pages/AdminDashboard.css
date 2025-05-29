@@ -73,12 +73,12 @@
   padding-bottom: 0.5rem;
 }
 
-.dashboard-home p {
+/* .dashboard-home p {
   font-size: 1rem;
   color: #34495e;
   line-height: 1.6;
   margin: 0.75rem 0;
-}
+} */
 
 .dashboard-home p strong {
   color: #2c3e50;
@@ -98,11 +98,14 @@
 /* Grid dla danych w dashboard-home */
 .dashboard-home .dashboard-info {
   display: grid;
-  grid-template-columns: 120px 1fr; /* kolumna etykiet stała, druga elastyczna */
+  grid-template-columns: 120px 1fr;
   row-gap: 0.75rem;
-  column-gap: 1rem;
+  column-gap: 2rem;
   align-items: center;
-  margin-top: 1rem;
+  margin: 1rem 0 0 0;
+  padding: 0;
+  max-width: 400px;
+  margin: 1rem auto 0;
 }
 
 .dashboard-home .info-label {
@@ -113,6 +116,7 @@
 
 .dashboard-home .info-value {
   color: #34495e;
+  text-align: left;
 }
 
 /* Profil image wyrównany do lewej w swojej komórce */
@@ -123,4 +127,8 @@
   object-fit: cover;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
   display: block;
+}
+.dashboard-home .info-row {
+  width: 100%;  
+  box-sizing: border-box;
 }
