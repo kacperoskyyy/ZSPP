@@ -8,7 +8,7 @@ const containerStyle = {
   minHeight: '100vh',
   // Możesz zmienić gradient, żeby pasował do Twojego designu
   background: 'linear-gradient(180deg, #e2f1ff 0%, #86b7e8 100%)',
-  fontFamily: 'Arial, sans-serif',
+  fontFamily:  'Montserrat, Arial, sans-serif',
 };
 
 const formWrapperStyle = {
