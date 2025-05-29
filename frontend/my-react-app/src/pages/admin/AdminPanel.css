@@ -381,16 +381,135 @@
   border-radius: 4px;
 }
 
+/* src/pages/admin/ManageEquipment.css */
+.equipment-panel {
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+.equipment-panel h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+.equipment-button-row {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
 
-/* Responsywność */
-@media (max-width: 768px) {
-  .buttons-next-to {
-    flex-direction: column;
-  }
-  
-  .report-sections section {
-    padding: 1rem;
-  }
+/* tabela */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.admin-table th,
+.admin-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+  color: #444;
+}
+.admin-table th {
+  background: #fafafa;
+  font-weight: 600;
+}
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* detail-panel for subviews */
+.detail-panel {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.detail-panel h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+.detail-panel p,
+.detail-panel li {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+/* form styles */
+.edit-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  margin-top: 0.4rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.2s;
+}
+.edit-form input:focus,
+.edit-form textarea:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 3px rgba(0,123,255,0.25);
+}
+
+/* buttons in forms and detail panels */
+.form-buttons,
+.detail-panel .form-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+.save-button {
+  padding: 0.6rem 1.2rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.save-button:hover {
+  background: #0069d9;
+}
+.delete-button {
+  padding: 0.6rem 1.2rem;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.delete-button:hover {
+  background: #c82333;
+}
+.back-button {
+  padding: 0.6rem 1.2rem;
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.back-button:hover {
+  background: #5a6268;
 }
 
 /* Responsywność */
