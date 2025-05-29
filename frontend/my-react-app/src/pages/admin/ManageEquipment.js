@@ -19,13 +19,7 @@ const ManageEquipment = () => {
 
   return (
     <div>
-      <h2>Zarządzanie kategoriami sprzętu</h2>
       <center>
-      <ButtonPanel
-      iconSrc="/category.png"
-      label="Lista kategorii sprzętu"
-      onClick={() => { /* funkcja */ }}
-    />
     <h2>Zarządznie sprzętem</h2>
     <div class="butttons-next-to">
     <ButtonPanel 
