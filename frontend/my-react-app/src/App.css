@@ -247,7 +247,7 @@ html, body {
   height: auto;
 }
 .App-Page3 {
-  font-family: Arial, sans-serif;
+  font-family: Montserrat,  Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -293,7 +293,7 @@ html, body {
   max-width: 100%;
 }
 .review-page {
-  font-family: "Arial", sans-serif;
+  font-family: "Montserrat", "Arial", sans-serif;
   background: linear-gradient(to bottom, #a7d7f9 60%, #505050 40%);
   /* min-height: 100vh; */
   display: flex;
