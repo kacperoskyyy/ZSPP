@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
 
 
+
+
 const UserNavigation = () => {
   const { logout } = useAuth();
 
@@ -24,7 +26,7 @@ const UserNavigation = () => {
         <img src="/gregory.png" alt="koszyk" className="NavIcon" />
         <span>Panel użytkownika</span>
         </Link>
-        <Link className="Basket" to="/">
+        <Link className="Basket" to="/Basket">
         <img src="/sport.png" alt="koszyk" className="NavIcon" />
         <span>Koszyk</span>
         </Link>

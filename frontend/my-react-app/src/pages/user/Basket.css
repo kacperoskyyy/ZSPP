@@ -1,0 +1,30 @@
+.basket-table {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 10 px;
+}
+
+.basket-table th, .basket-table td {
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.basket-img {
+  width: 50px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.basket-product {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.free-shipping-banner {
+  background-color: #fff3cd;
+  padding: 10px;
+  font-weight: bold;
+  margin: 15px 0;
+}
