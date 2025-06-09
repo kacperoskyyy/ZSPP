@@ -2,14 +2,13 @@
 import React, { useState, useEffect } from "react";
 import ButtonPanel from "../../components/ButtonPanel";
 import ManageSportList from "./ManageSportList";
-import ManageLocationList from "./ManageLocationList";
 import ManageSportAdd from "./ManageSportAdd";
 import ManageTransport from "./ManageTransport";
 import './AdminPanel.css';
 
 const ManageEquipment = () => {
   const [items, setItems] = useState([]);
-  const [activeView, setActiveView] = useState("list"); // 'list', 'sportList', 'locationList', 'sportAdd', 'transport'
+  const [activeView, setActiveView] = useState("list"); // 'list', 'sportList', 'sportAdd', 'transport'
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -25,7 +24,6 @@ const ManageEquipment = () => {
 
   // Render subviews
   if (activeView === "sportList") return <ManageSportList items={items} onBack={showList} />;
-  if (activeView === "locationList") return <ManageLocationList items={items} onBack={showList} />;
   if (activeView === "sportAdd") return <ManageSportAdd onBack={showList} />;
   if (activeView === "transport") return <ManageTransport onBack={showList} />;
 
@@ -37,11 +35,6 @@ const ManageEquipment = () => {
           iconSrc="/sport.png"
           label="Lista sprzętu sportowego"
           onClick={() => setActiveView("sportList")}
-        />
-        <ButtonPanel
-          iconSrc="/pin.png"
-          label="Lista sprzętu wg lokalizacji"
-          onClick={() => setActiveView("locationList")}
         />
       </div>
       <div className="equipment-button-row">

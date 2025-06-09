@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CompositeButtons from "../../components/CompositeButtons";
+import CompositeButtonsWithoutEdit from "../../components/CompositeButtonsWithoutEdit.jsx";
 import ManageUserInfo from "./ManageUserInfo";
 import ManageUserEdit from "./ManageUserEdit";
 import ManageUserDelete from "./ManageUserDelete";
@@ -58,7 +59,6 @@ const ManageUsers = () => {
   });
 
   if (activeView === "info") return <ManageUserInfo user={selectedUser} onBack={showList} />;
-  if (activeView === "edit") return <ManageUserEdit user={selectedUser} onBack={showList} />;
   if (activeView === "delete") return <ManageUserDelete user={selectedUser} onBack={showList} onDelete={refreshUsers}/>;
 
   return (
@@ -99,10 +99,9 @@ const ManageUsers = () => {
                 <td>{user.phone_number || "-"}</td>
                 <td>{user.role}</td>
                 <td>
-                  <CompositeButtons
+                  <CompositeButtonsWithoutEdit
                     onButtonOneClick={() => handleViewChange("info", user)}
-                    onButtonTwoClick={() => handleViewChange("edit", user)}
-                    onButtonThreeClick={() => handleViewChange("delete", user)}
+                    onButtonTwoClick={() => handleViewChange("delete", user)}
                   />
                 </td>
               </tr>
