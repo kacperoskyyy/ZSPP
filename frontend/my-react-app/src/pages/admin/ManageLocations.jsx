@@ -41,7 +41,6 @@ const handleViewChange = (view, location) => {
       });
       if (!response.ok) throw new Error("Brak dostępu");
       const data = await response.json();
-      setUsers(data);
     } catch (error) {
       console.error("Błąd pobierania użytkowników:", error);
     }
