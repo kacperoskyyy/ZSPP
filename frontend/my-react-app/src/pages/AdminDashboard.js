@@ -7,6 +7,7 @@ import ManageUsers from "./admin/ManageUsers";
 import ManageCategories from "./admin/ManageCategories";
 import ManageEquipment from "./admin/ManageEquipment";
 import ManageReports from "./admin/ManageReports";
+import ManageLocations from "./admin/ManageLocations";
 
 import "./AdminDashboard.css";
 
@@ -64,6 +65,14 @@ const AdminDashboard = () => {
             </button>
           </li>
           <li>
+            <button
+              className={`menu-button ${activeTab === "locations" ? "active" : ""}`}
+              onClick={() => setActiveTab("locations")}>
+                <img src= "/pin.png" alt="Profil" className="menu-icon" />
+              Lokalizacje
+            </button>
+          </li>
+          <li>
             <button className="menu-button"
               onClick={() => {
                 logout();
@@ -116,6 +125,7 @@ const AdminDashboard = () => {
         {activeTab === "categories" && <ManageCategories />}
         {activeTab === "equipment" && <ManageEquipment />}
         {activeTab === "reports" && <ManageReports />}
+        {activeTab === "locations" && <ManageLocations/>}
       </main>
     </div>
   );
