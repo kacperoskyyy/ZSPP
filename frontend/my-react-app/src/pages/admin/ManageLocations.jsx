@@ -2,41 +2,39 @@
 import React, { useState, useEffect } from "react";
 import ButtonPanel from "../../components/ButtonPanel";
 import ManageLocationAdd from "./ManageLocationAdd";
-import './AdminPanel.css';
+import "./AdminPanel.css";
 import CompositeButtons from "../../components/CompositeButtons";
 import ManageLocationsList from "./ManageLocationsList";
 import ManageLocationDetails from "./ManageLocationDetails";
 import ManageLocationDelete from "./ManageLocationDelete";
 import ManageLocationsEdit from "./ManageLocationEdit";
 
-
 const ManageLocations = () => {
   const [items, setItems] = useState([]);
-  const [activeView, setActiveView] = useState("list"); 
+  const [activeView, setActiveView] = useState("list");
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    fetch("/api/admin/locations", {
+    fetch("/api/locations", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())
       .then(setItems)
       .catch(console.error);
   }, []);
-const [selectedlocation, setSelectedLocation] = useState(null);
+  const [selectedlocation, setSelectedLocation] = useState(null);
 
-const handleViewChange = (view, location) => {
-  setSelectedLocation(location);
-  setActiveView(view);
-};
-
+  const handleViewChange = (view, location) => {
+    setSelectedLocation(location);
+    setActiveView(view);
+  };
 
   const showList = () => setActiveView("list");
 
   const refreshLocations = async () => {
     const token = localStorage.getItem("access_token");
     try {
-      const response = await fetch("/api/admin/locations", {
+      const response = await fetch("/api/locations", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error("Brak dostępu");
@@ -46,13 +44,27 @@ const handleViewChange = (view, location) => {
     }
   };
 
-
   // Render subviews
-  if (activeView === "locationList") return <ManageLocationsList items={items} onBack={showList} />;
-  if (activeView === "locationAdd") return <ManageLocationAdd onBack={showList} />;
-  if (activeView === "info") return <ManageLocationDetails onBack={showList} location={selectedlocation} />;
-  if (activeView === "delete") return <ManageLocationDelete user={selectedlocation} onBack={showList} onDelete={refreshLocations}/>;
-  if (activeView === "edit") return <ManageLocationsEdit location={selectedlocation} onBack={showList} />;
+  if (activeView === "locationList")
+    return <ManageLocationsList items={items} onBack={showList} />;
+  if (activeView === "locationAdd")
+    return <ManageLocationAdd onBack={showList} />;
+  if (activeView === "info")
+    return (
+      <ManageLocationDetails onBack={showList} location={selectedlocation} />
+    );
+  if (activeView === "delete")
+    return (
+      <ManageLocationDelete
+        user={selectedlocation}
+        onBack={showList}
+        onDelete={refreshLocations}
+      />
+    );
+  if (activeView === "edit")
+    return (
+      <ManageLocationsEdit location={selectedlocation} onBack={showList} />
+    );
 
   return (
     <div className="equipment-panel">
@@ -70,7 +82,6 @@ const handleViewChange = (view, location) => {
           label="Dodaj lokalizację"
           onClick={() => setActiveView("locationAdd")}
         />
-
       </div>
       <table className="admin-table">
         <thead>
@@ -96,14 +107,14 @@ const handleViewChange = (view, location) => {
               <td>{i.created_at}</td>
               <td>{i.updated_at}</td>
               <td>
-              <CompositeButtons
-                    onButtonOneClick={() => handleViewChange("info", i)}
-                    onButtonTwoClick={() => handleViewChange("edit", i)}
-                    onButtonThreeClick={() => handleViewChange("delete", i)}
-                  />
+                <CompositeButtons
+                  onButtonOneClick={() => handleViewChange("info", i)}
+                  onButtonTwoClick={() => handleViewChange("edit", i)}
+                  onButtonThreeClick={() => handleViewChange("delete", i)}
+                />
               </td>
             </tr>
-          ))}
+          ))} 
         </tbody>
       </table>
     </div>

@@ -400,3 +400,9 @@ async def create_equipment_transport_item(item_data: _schemas.EquipmentTransport
     db.commit()
     db.refresh(new_item)
     return _schemas.EquipmentTransportItemRead.from_orm(new_item)
+
+async def delete_location(location_id: int, db: _orm.Session):
+    location = db.query(_models.Location).filter(_models.Location.id == location_id).first()
+    if location:
+        db.delete(location)
+        db.commit()

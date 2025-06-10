@@ -412,7 +412,6 @@ async def admin_create_location(
 ):
     return await _services.create_location(location, db)
 
-
 @app.get("/api/admin/locations/{location_id}", response_model=_schemas.LocationRead)
 async def admin_get_location(
         location_id: int,
@@ -464,6 +463,13 @@ async def admin_create_report(
 ):
     return await _services.create_report(report, db)
 
+@app.delete("/api/admin/locations/{location_id}")
+async def admin_delete_location(
+        location_id: int,
+        admin_user: _schemas.UserRead = _fastapi.Depends(_auth.get_admin_user),
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    return await _services.delete_location(location_id, db)
 
 @app.post("/api/admin/equipment/{equipment_id}/upload-image", response_model=_schemas.EquipmentImageRead)
 async def upload_equipment_image(
