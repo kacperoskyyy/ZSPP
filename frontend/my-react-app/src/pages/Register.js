@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import FormContainer from "../components/FormContainer";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import "./Register.css";
 
 const Register = () => {
   // Dane logowania
@@ -20,10 +21,9 @@ const Register = () => {
   // Komunikaty
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-
   const [loading, setLoading] = useState(false);
 
-  // Pobranie metody login z AuthContext oraz nawigacji do przekierowywania
+  // Kontekst uwierzytelniania i nawigacja
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -32,13 +32,13 @@ const Register = () => {
     setError("");
     setSuccessMessage("");
     setLoading(true);
-    // Walidacja dopasowania haseł
+
     if (password !== repeatPassword) {
       setError("Hasła nie są takie same!");
+      setLoading(false);
       return;
     }
 
-    // Przygotowanie danych do wysłania
     const payload = {
       email,
       password,
@@ -63,30 +63,15 @@ const Register = () => {
       }
 
       const data = await response.json();
-      // Zapis tokenu w localStorage
       localStorage.setItem("access_token", data.access_token);
-
-      // Ustawienie danych użytkownika w kontekście
       login(data.user);
-
       setSuccessMessage("Konto zostało założone pomyślnie!");
 
-      // Opcjonalnie – przekierowanie po pomyślnej rejestracji
       if (data.user.role === "admin") {
         navigate("/admin-panel");
       } else {
         navigate("/user-dashboard");
       }
-
-      // Wyczyść pola
-      setEmail("");
-      setPassword("");
-      setRepeatPassword("");
-      setFirstName("");
-      setLastName("");
-      setBirthDate("");
-      setGender("");
-      setPhone("");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -96,46 +81,50 @@ const Register = () => {
 
   return (
     <FormContainer>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Zarejestruj się
-      </h2>
-      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+      <h2 className="register-title">Zarejestruj się</h2>
+
+      {error && (
+        <p className="register-message register-error">{error}</p>
+      )}
       {successMessage && (
-        <p style={{ color: "green", textAlign: "center" }}>{successMessage}</p>
+        <p className="register-message register-success">
+          {successMessage}
+        </p>
       )}
 
       <form onSubmit={handleRegister}>
-        {/* Sekcja z danymi logowania */}
-        <div style={{ marginBottom: "15px" }}>
+        <div className="register-form-group">
           <label htmlFor="email">Adres e-mail</label>
           <input
             type="email"
             id="email"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="register-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Wprowadź e-mail"
             required
           />
         </div>
-        <div style={{ marginBottom: "15px" }}>
+
+        <div className="register-form-group">
           <label htmlFor="password">Hasło</label>
           <input
             type="password"
             id="password"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="register-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Wprowadź hasło"
             required
           />
         </div>
-        <div style={{ marginBottom: "20px" }}>
+
+        <div className="register-form-group register-form-group--password">
           <label htmlFor="repeatPassword">Powtórz hasło</label>
           <input
             type="password"
             id="repeatPassword"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="register-input"
             value={repeatPassword}
             onChange={(e) => setRepeatPassword(e.target.value)}
             placeholder="Powtórz hasło"
@@ -143,47 +132,49 @@ const Register = () => {
           />
         </div>
 
-        {/* Sekcja z danymi profilu */}
-        <div style={{ marginBottom: "15px" }}>
+        <div className="register-form-group">
           <label htmlFor="firstName">Imię</label>
           <input
             type="text"
             id="firstName"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="register-input"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             placeholder="Wprowadź imię"
             required
           />
         </div>
-        <div style={{ marginBottom: "15px" }}>
+
+        <div className="register-form-group">
           <label htmlFor="lastName">Nazwisko</label>
           <input
             type="text"
             id="lastName"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="register-input"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             placeholder="Wprowadź nazwisko"
             required
           />
         </div>
-        <div style={{ marginBottom: "15px" }}>
+
+        <div className="register-form-group">
           <label htmlFor="birthDate">Data urodzenia</label>
           <input
             type="date"
             id="birthDate"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="register-input"
             value={birthDate}
             onChange={(e) => setBirthDate(e.target.value)}
             required
           />
         </div>
-        <div style={{ marginBottom: "15px" }}>
+
+        <div className="register-form-group">
           <label htmlFor="gender">Płeć</label>
           <select
             id="gender"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="register-select"
             value={gender}
             onChange={(e) => setGender(e.target.value)}
             required
@@ -193,12 +184,13 @@ const Register = () => {
             <option value="false">Kobieta</option>
           </select>
         </div>
-        <div style={{ marginBottom: "20px" }}>
+
+        <div className="register-form-group register-form-group--password">
           <label htmlFor="phone">Numer telefonu</label>
           <input
             type="tel"
             id="phone"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="register-input"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="Podaj numer telefonu"
@@ -208,24 +200,16 @@ const Register = () => {
 
         <button
           type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
+          className="register-button"
           disabled={loading}
         >
           {loading ? "Proszę czekać…" : "Zarejestruj się"}
         </button>
       </form>
 
-      <div style={{ textAlign: "center", marginTop: "15px" }}>
-        Masz już konto? <Link to="/login">Zaloguj się</Link>
-      </div>
+      <Link to="/login" className="register-link">
+        Masz już konto? Zaloguj się
+      </Link>
     </FormContainer>
   );
 };
