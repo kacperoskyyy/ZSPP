@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import FormContainer from "../components/FormContainer";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import "./Login.css";
 
 const Login = () => {
   const { login } = useAuth();
@@ -59,31 +60,35 @@ const Login = () => {
   };
 
   return (
-    <FormContainer>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Zaloguj się</h2>
-      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+    
+    <FormContainer className="form-container">
+      
+      <h2 className="login-title">Zaloguj się</h2>
+      {error && (
+        <p className="login-message login-error">{error}</p>
+      )}
       {successMessage && (
-        <p style={{ color: "green", textAlign: "center" }}>{successMessage}</p>
+        <p className="login-message login-success">{successMessage}</p>
       )}
       <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: "15px" }}>
+        <div className="login-form-group">
           <label htmlFor="username">Adres e-mail</label>
           <input
             type="email"
             id="username"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="login-input"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Wprowadź e-mail"
             required
           />
         </div>
-        <div style={{ marginBottom: "20px" }}>
+        <div className="login-form-group login-form-group--password">
           <label htmlFor="password">Hasło</label>
           <input
             type="password"
             id="password"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            className="login-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Wprowadź hasło"
@@ -92,28 +97,20 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            marginBottom: "10px",
-          }}
+          className="login-button"
           disabled={loading}
         >
           {loading ? "Proszę czekać…" : "Zaloguj się"}
         </button>
       </form>
-      <div style={{ textAlign: "center", marginBottom: "10px" }}>
-        <Link to="/forgot-password">Przypomnij hasło</Link>
-      </div>
-      <div style={{ textAlign: "center" }}>
-        Nie masz konta? <Link to="/register">Zarejestruj się</Link>
-      </div>
+      <Link to="/forgot-password" className="login-link">
+        Przypomnij hasło
+      </Link>
+      <Link to="/register" className="login-link">
+        Nie masz konta? Zarejestruj się
+      </Link>
     </FormContainer>
+    
   );
 };
 

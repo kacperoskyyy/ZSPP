@@ -1,0 +1,151 @@
+/* FormContainer.css */
+
+/* Zmienne CSS dla łatwej konfiguracji */
+:root {
+  /* Rozmiary */
+  --form-width: 400px;
+  --form-max-width: 90%;
+  --form-padding: 40px;
+  --form-border-radius: 12px;
+  
+  /* Kolory */
+  --form-bg-color: rgba(255, 255, 255, 0.9);
+  --form-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --form-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
+  
+  /* Tło kontenera */
+  --container-bg: linear-gradient(135deg, #a8d5e5 0%, #7fb3d3 50%, #5c9bd5 100%);
+  
+  /* Typografia */
+  --form-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Główny kontener (pełny ekran z tłem) */
+.form-container-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--container-bg);
+  font-family: var(--form-font-family);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Wewnętrzny kontener (biały formularz) */
+.form-container-inner {
+  width: var(--form-width);
+  max-width: var(--form-max-width);
+  background-color: var(--form-bg-color);
+  border-radius: var(--form-border-radius);
+  padding: var(--form-padding);
+  box-shadow: var(--form-shadow);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.form-container-inner:hover {
+  box-shadow: var(--form-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Motywy kolorystyczne */
+.theme-dark {
+  --container-bg: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+  --form-bg-color: #3a4a5c;
+  --form-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.theme-green {
+  --container-bg: linear-gradient(180deg, #d5f4e6 0%, #81c784 100%);
+  --form-shadow: 0 0 15px rgba(76, 175, 80, 0.2);
+}
+
+.theme-purple {
+  --container-bg: linear-gradient(180deg, #f3e5f5 0%, #ba68c8 100%);
+  --form-shadow: 0 0 15px rgba(186, 104, 200, 0.2);
+}
+
+.theme-orange {
+  --container-bg: linear-gradient(180deg, #fff3e0 0%, #ffb74d 100%);
+  --form-shadow: 0 0 15px rgba(255, 183, 77, 0.2);
+}
+
+.theme-minimal {
+  --container-bg: #f8f9fa;
+  --form-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Rozmiary */
+.size-small {
+  --form-width: 300px;
+  --form-padding: 15px;
+}
+
+.size-large {
+  --form-width: 450px;
+  --form-padding: 30px;
+}
+
+.size-extra-large {
+  --form-width: 600px;
+  --form-padding: 40px;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+  :root {
+    --form-width: 100%;
+    --form-max-width: 95%;
+    --form-padding: 15px;
+  }
+  
+  .form-container-wrapper {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --form-padding: 12px;
+  }
+}
+
+
+/* FormContainer.css */
+
+/* Domyślny wrapper z gradientem i centrowaniem */
+.form-container-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* Możesz zmienić gradient pod swój design */
+  background: linear-gradient(180deg, #e2f1ff 0%, #86b7e8 100%);
+  font-family: 'Montserrat', Arial, sans-serif;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* Wewnętrzny kontener na formularz */
+.form-container-inner {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+}
+
+/* Tematy (opcjonalne) */
+.theme-dark .form-container-inner {
+  background: #2c2c2c;
+  color: #f0f0f0;
+}
+
+/* Rozmiary (opcjonalne) */
+.size-large .form-container-inner {
+  max-width: 600px;
+}
