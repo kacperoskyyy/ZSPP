@@ -11,7 +11,7 @@ const Header = () => {
   const { pathname } = useLocation();
 
   // Tu wypiszemy trasy, na których chcemy ukryć globalny Header
-  const hideHeaderOn = ["/login", "/register", "/contact"];
+  const hideHeaderOn = ["/login", "/register", ];
 
   if (hideHeaderOn.includes(pathname)) {
     // Nie renderujemy Main/User/AdminNavigation
