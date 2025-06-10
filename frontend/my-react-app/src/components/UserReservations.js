@@ -40,7 +40,7 @@ const UserReservations = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px" }} className="content-card">
       <h2>Moje rezerwacje</h2>
       {current.length === 0 && <p>Brak aktywnych rezerwacji.</p>}
       {current.map((r) => (

@@ -30,7 +30,7 @@ const UserHistory = () => {
   if (error) return <p style={{ color: "red" }}>Błąd: {error}</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px" }} className="content-card">
       <h2>Historia wypożyczeń</h2>
       {history.length === 0 && <p>Brak zakończonych wypożyczeń.</p>}
       {history.map((r) => (

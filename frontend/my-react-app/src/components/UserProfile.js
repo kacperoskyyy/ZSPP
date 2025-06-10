@@ -27,7 +27,7 @@ const UserProfile = () => {
   if (error) return <p style={{ color: "red" }}>Błąd: {error}</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px" }} className="content-card">
       <h2>Profil użytkownika</h2>
       <p>
         <strong>Imię i nazwisko:</strong>{" "}
@@ -54,6 +54,9 @@ const UserProfile = () => {
         <strong>Adres e-mail:</strong> {profile.email}
       </p>
       <p>
+        <strong>Hasło:</strong> <button>Zmień hasło</button>
+      </p>
+      <p>
         <strong>Zdjęcie profilowe:</strong>{" "}
         {profile.profile_image ? (
           <img
@@ -65,7 +68,7 @@ const UserProfile = () => {
           "Brak"
         )}
       </p>
-      <button>Zmień hasło</button>
+      
     </div>
   );
 };

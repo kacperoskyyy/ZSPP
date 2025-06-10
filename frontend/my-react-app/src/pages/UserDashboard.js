@@ -70,6 +70,7 @@
 // src/pages/UserDashboard.js
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import "./UserDashboard.css";
 
 // Importujemy komponenty widoków
 import UserProfile from "../components/UserProfile";
