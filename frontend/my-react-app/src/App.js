@@ -25,6 +25,7 @@ import UserProfile from "./components/UserProfile";
 import UserHistory from "./components/UserHistory";
 import UserReservations from "./components/UserReservations";
 import Basket from "./pages/user/Basket";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/Basket" element={<Basket />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
 
               <Route
                 path="/user-dashboard"
