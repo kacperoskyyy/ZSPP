@@ -16,12 +16,12 @@ const ContactPage = () => {
 
   return (
     <div className="contact-page">
-      <header className="contact-header">
+      {/* <header className="contact-header">
         <h1>WSS</h1>
         <button className="back-btn" onClick={() => navigate(-1)}>
           Powrót
         </button>
-      </header>
+      </header> */}
 
       <main className="contact-main">
         <h2>Nasze lokalizacje:</h2>
