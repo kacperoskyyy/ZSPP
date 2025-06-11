@@ -512,6 +512,23 @@
   background: #5a6268;
 }
 
+.reservation-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reservation-button:hover {
+  background-color: #45a049;
+}
+
 /* Responsywność */
 @media (max-width: 768px) {
   .search-container {

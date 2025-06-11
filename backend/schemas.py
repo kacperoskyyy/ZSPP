@@ -116,7 +116,7 @@ class ReservationCreate(ReservationBase):
 
 class ReservationRead(ReservationBase):
     id: int
-    user_id: int
+    user_id: Optional[int]
     created_at: dt.datetime
 
     class Config:
