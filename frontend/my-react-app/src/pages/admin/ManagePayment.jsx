@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const ReservationSummary = () => {
+const ManagePayment = () => {
   const { id } = useParams();
   const [reservation, setReservation] = useState(null);
 
@@ -30,4 +30,4 @@ const ReservationSummary = () => {
   );
 };
 
-export default ReservationSummary;
+export default ManagePayment;

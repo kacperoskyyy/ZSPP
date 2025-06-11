@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ManagePayment from "./ManagePayment";
 
 const ManageReservations = () => {
   const [reservations, setReservations] = useState([]);
+  const [activeView, setActiveView] = useState("list");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -23,6 +25,17 @@ const ManageReservations = () => {
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
+
+    const handleViewChange = (view, reservation) => {
+    setReservations(reservation);
+    setActiveView(view);
+  };
+
+  const showList = () => {
+    setActiveView("list");
+  };
+
+  if (activeView === "payments") return <ManagePayment onBack={showList} />;
 
   if (loading) return <p>Ładowanie rezerwacji…</p>;
   if (error) return <p style={{ color: "red" }}>Błąd: {error}</p>;
@@ -51,7 +64,7 @@ const ManageReservations = () => {
               <td>{new Date(r.end_date).toLocaleDateString()}</td>
               <td>{r.status}</td>
               <td>
-                <button onClick={() => navigate(`/admin/reservations/${r.id}`)} className="reservation-button">
+                <button onClick={() => handleViewChange("payments", reservations)} className="reservation-button">
                   Podsumowanie
                 </button>
               </td>
