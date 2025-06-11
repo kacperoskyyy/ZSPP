@@ -488,6 +488,13 @@ async def admin_create_report(
 ):
     return await _services.create_report(report, db)
 
+@app.get("/api/admin/generate-report/{reportType}")
+async def admin_generate_report(
+        reportType: str,
+        admin_user: _schemas.UserRead = _fastapi.Depends(_auth.get_admin_user),
+        db: _orm.Session = _fastapi.Depends(_services.get_db)
+):
+    return await _services.generate_report(reportType, db)
 
 @app.delete("/api/admin/locations/{location_id}")
 async def admin_delete_location(

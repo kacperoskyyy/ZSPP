@@ -1,5 +1,6 @@
 import passlib.hash as _hash
 import sqlalchemy.orm as _orm
+from sqlalchemy import func
 import database as _database
 import models as _models
 import schemas as _schemas
@@ -8,6 +9,9 @@ import fastapi as _fastapi
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 import os
 from dotenv import load_dotenv
+import matplotlib.pyplot as plt
+import io
+import base64
 
 load_dotenv()
 
@@ -355,6 +359,60 @@ async def get_all_reports(db: _orm.Session):
     reports = db.query(_models.AdminReport).all()
     return [_schemas.AdminReportRead.model_validate(r) for r in reports]
 
+async def generate_report(reportType: str, db: _orm.Session):
+
+    if reportType == "location_summary":
+        data = (
+            db.query(_models.Location.city, func.count(_models.Reservation.id))
+            .join(_models.EquipmentTransport, _models.EquipmentTransport.destination_id == _models.Location.id)
+            .join(_models.Reservation, _models.Reservation.id == _models.EquipmentTransport.reservation_id)
+            .group_by(_models.Location.city)
+            .all()
+        )
+        title = "Liczba rezerwacji wg lokalizacji"
+
+    elif reportType == "location_financial":
+        data = (
+            db.query(_models.Location.city, func.sum(_models.Payment.amount))
+            .join(_models.EquipmentTransport, _models.EquipmentTransport.destination_id == _models.Location.id)
+            .join(_models.Reservation, _models.Reservation.id == _models.EquipmentTransport.reservation_id)
+            .join(_models.Payment, _models.Payment.reservation_id == _models.Reservation.id)
+            .group_by(_models.Location.city)
+            .all()
+        )
+        title = "Wpływy finansowe wg lokalizacji"
+
+    elif reportType == "user_rentals":
+        data = (
+            db.query(_models.User.email, func.count(_models.Reservation.id))
+            .join(_models.Reservation, _models.User.id == _models.Reservation.user_id)
+            .group_by(_models.User.email)
+            .order_by(func.count(_models.Reservation.id).desc())
+            .limit(10)
+            .all()
+        )
+        title = "Top 10 użytkowników wg liczby rezerwacji"
+
+    elif reportType == "full_financial":
+        data = (
+            db.query(func.strftime('%Y-%m', _models.Payment.created_at), func.sum(_models.Payment.amount))
+            .group_by(func.strftime('%Y-%m', _models.Payment.created_at))
+            .order_by(func.strftime('%Y-%m', _models.Payment.created_at))
+            .all()
+        )
+        title = "Wpływy finansowe miesięcznie"
+
+    else:
+        return {"message": "Nieznany typ raportu."}
+
+    labels, values = zip(*data) if data else ([], [])
+    chart = _generate_chart(title, labels, values)
+
+    return {
+        "type": reportType,
+        "title": title,
+        "chart": f"data:image/png;base64,{chart}"
+    }
 
 async def create_report(report_data: _schemas.AdminReportCreate, db: _orm.Session):
     new_report = _models.AdminReport(
@@ -407,6 +465,7 @@ async def create_equipment_transport(et_data: _schemas.EquipmentTransportCreate,
         current_location_id=et_data.current_location_id,
         destination_id=et_data.destination_id
     )
+    print("dupa")
     db.add(et)
     db.commit()
     db.refresh(et)
@@ -431,3 +490,20 @@ async def delete_location(location_id: int, db: _orm.Session):
     if location:
         db.delete(location)
         db.commit()
+
+
+# HELPING FUNCTIONS
+
+def _generate_chart(title: str, labels: list, values: list) -> str:
+    plt.figure(figsize=(10, 5))
+    plt.bar(labels, values)
+    plt.title(title)
+    plt.xlabel("Kategoria")
+    plt.ylabel("Wartość")
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    plt.close()
+    buf.seek(0)
+    return base64.b64encode(buf.read()).decode('utf-8')

@@ -1,13 +1,12 @@
-// src/pages/admin/ManageReports.js
 import React, { useState, useEffect } from "react";
 import ButtonPanel from "../../components/ButtonPanel";
 import CompositeButtons from "../../components/CompositeButtons";
-import './AdminPanel.css';
+import "./AdminPanel.css";
 
 const ManageReports = () => {
   const [reports, setReports] = useState([]);
   const [activeReport, setActiveReport] = useState(null);
-  const [reportData, setReportData] = useState([]);
+  const [reportData, setReportData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -30,61 +29,40 @@ const ManageReports = () => {
   const generateReport = async (reportType, title) => {
     setIsLoading(true);
     setActiveReport(title);
-    
+
     try {
       const token = localStorage.getItem("access_token");
-      const response = await fetch(`/api/admin/generate-report?type=${reportType}`, {
+      const response = await fetch(`/api/admin/generate-report/${reportType}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
       if (!response.ok) throw new Error("Błąd generowania raportu");
       const data = await response.json();
       setReportData(data);
     } catch (error) {
       console.error("Błąd generowania raportu:", error);
-      setReportData([]);
+      setReportData(null);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const renderReportTable = () => {
+  const renderReportResult = () => {
     if (isLoading) {
       return <div className="loading">Generowanie raportu...</div>;
     }
 
-    if (!reportData || reportData.length === 0) {
+    if (!reportData || !reportData.chart) {
       return <div className="no-results">Brak danych do wyświetlenia</div>;
     }
 
-    // Pobierz klucze z pierwszego obiektu dla nagłówków
-    const headers = Object.keys(reportData[0]);
-
     return (
-      <div className="table-responsive">
-        <h3>{activeReport}</h3>
-        <table className="admin-table">
-          <thead>
-            <tr>
-              {headers.map(header => (
-                <th key={header}>{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {reportData.map((row, index) => (
-              <tr key={index}>
-                {headers.map(header => (
-                  <td key={`${index}-${header}`}>
-                    {typeof row[header] === 'object' 
-                      ? JSON.stringify(row[header]) 
-                      : row[header]}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="report-chart">
+        <h3>{reportData.title}</h3>
+        <img
+          src={reportData.chart}
+          alt={reportData.title}
+          style={{ maxWidth: "100%", height: "auto", marginTop: "1rem" }}
+        />
       </div>
     );
   };
@@ -99,15 +77,19 @@ const ManageReports = () => {
         <section>
           <h2>Raporty ogólne</h2>
           <div className="buttons-next-to">
-            <ButtonPanel 
+            <ButtonPanel
               iconSrc="/money.png"
               label="Wygeneruj pełny raport finansowy"
-              onClick={() => generateReport("full_financial", "Pełny raport finansowy")}
+              onClick={() =>
+                generateReport("full_financial", "Pełny raport finansowy")
+              }
             />
             <ButtonPanel
               iconSrc="/pin.png"
               label="Wygeneruj raport z podsumowaniem każdej lokalizacji"
-              onClick={() => generateReport("location_summary", "Podsumowanie lokalizacji")}
+              onClick={() =>
+                generateReport("location_summary", "Podsumowanie lokalizacji")
+              }
             />
           </div>
         </section>
@@ -118,12 +100,22 @@ const ManageReports = () => {
             <ButtonPanel
               iconSrc="/money.png"
               label="Wygeneruj raport finansowy dla lokalizacji"
-              onClick={() => generateReport("location_financial", "Raport finansowy lokalizacji")}
+              onClick={() =>
+                generateReport(
+                  "location_financial",
+                  "Raport finansowy lokalizacji"
+                )
+              }
             />
             <ButtonPanel
               iconSrc="/pin.png"
               label="Wygeneruj raport wypożyczeń dla lokalizacji"
-              onClick={() => generateReport("location_rentals", "Raport wypożyczeń lokalizacji")}
+              onClick={() =>
+                generateReport(
+                  "location_rentals",
+                  "Raport wypożyczeń lokalizacji"
+                )
+              }
             />
           </div>
         </section>
@@ -134,7 +126,9 @@ const ManageReports = () => {
             <ButtonPanel
               iconSrc="/profile.png"
               label="Wygeneruj raport wypożyczeń użytkowników"
-              onClick={() => generateReport("user_rentals", "Raport wypożyczeń użytkowników")}
+              onClick={() =>
+                generateReport("user_rentals", "Raport wypożyczeń użytkowników")
+              }
             />
             <ButtonPanel
               iconSrc="/profile.png"
@@ -145,7 +139,7 @@ const ManageReports = () => {
         </section>
       </div>
 
-      {activeReport && renderReportTable()}
+      {activeReport && renderReportResult()}
 
       <div className="saved-reports">
         <h2>Zapisane raporty</h2>
@@ -171,10 +165,16 @@ const ManageReports = () => {
                     {new Date(r.end_date).toLocaleDateString()}
                   </td>
                   <td>
-                    <CompositeButtons 
-                      onButtonOneClick={() => console.log("Podgląd raportu", r.id)}
-                      onButtonTwoClick={() => console.log("Eksport raportu", r.id)}
-                      onButtonThreeClick={() => console.log("Usuń raport", r.id)}
+                    <CompositeButtons
+                      onButtonOneClick={() =>
+                        console.log("Podgląd raportu", r.id)
+                      }
+                      onButtonTwoClick={() =>
+                        console.log("Eksport raportu", r.id)
+                      }
+                      onButtonThreeClick={() =>
+                        console.log("Usuń raport", r.id)
+                      }
                     />
                   </td>
                 </tr>

@@ -12,7 +12,7 @@ function MainPage() {
       <header className="App-header">
         <WelcomeSection />
       </header>
-      <div className="App-Page2">
+      <div id="page2" className="App-Page2">
         <Navigation kierunek />
         <ImageGallery />
       </div>

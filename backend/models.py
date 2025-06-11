@@ -153,6 +153,7 @@ class EquipmentTransport(database.Base):
     id = sql.Column(sql.Integer, primary_key=True, index=True, autoincrement=True)
     reservation_id = sql.Column(sql.Integer, sql.ForeignKey("reservations.id"))
     current_location_id = sql.Column(sql.Integer, sql.ForeignKey("locations.id"))
+    equipment_id = sql.Column(sql.Integer, sql.ForeignKey("equipment.id"))
     destination_id = sql.Column(sql.Integer, sql.ForeignKey("locations.id"))
     created_at = sql.Column(sql.DateTime, default=dt.datetime.now)
     updated_at = sql.Column(sql.DateTime, default=dt.datetime.now, onupdate=dt.datetime.now)
