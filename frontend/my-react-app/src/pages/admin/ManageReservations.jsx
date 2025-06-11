@@ -64,7 +64,7 @@ const ManageReservations = () => {
               <td>{new Date(r.end_date).toLocaleDateString()}</td>
               <td>{r.status}</td>
               <td>
-                <button onClick={() => handleViewChange("payments", reservations)} className="reservation-button">
+                <button onClick={() => handleViewChange("payments", r)} className="reservation-button">
                   Podsumowanie
                 </button>
               </td>
