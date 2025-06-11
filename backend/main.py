@@ -494,7 +494,6 @@ async def admin_generate_report(
         admin_user: _schemas.UserRead = _fastapi.Depends(_auth.get_admin_user),
         db: _orm.Session = _fastapi.Depends(_services.get_db)
 ):
-    print("dupa")
     return await _services.generate_report(reportType, db)
 
 @app.delete("/api/admin/locations/{location_id}")
