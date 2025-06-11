@@ -465,6 +465,7 @@ async def create_equipment_transport(et_data: _schemas.EquipmentTransportCreate,
         current_location_id=et_data.current_location_id,
         destination_id=et_data.destination_id
     )
+    print("dupa")
     db.add(et)
     db.commit()
     db.refresh(et)

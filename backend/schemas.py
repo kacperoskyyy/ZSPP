@@ -146,7 +146,7 @@ class EquipmentTransportBase(_pydantic.BaseModel):
     reservation_id: int
     current_location_id: int
     destination_id: int
-
+    equipment_id: int
 
 class EquipmentTransportCreate(EquipmentTransportBase):
     pass
