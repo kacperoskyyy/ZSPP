@@ -544,3 +544,56 @@
     padding: 0.25rem;
   }
 }
+
+.manage-payment-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.manage-payment-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.manage-payment-container p {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.manage-payment-container strong {
+  color: #555;
+}
+
+.manage-payment-container button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+}
+
+.manage-payment-container button:first-of-type {
+  background-color: #4CAF50;
+  color: white;
+  margin-right: 50px;
+}
+
+.manage-payment-container button:first-of-type:hover {
+  background-color: #45a049;
+}
+
+.manage-payment-container button:last-of-type {
+  background-color: #ccc;
+  margin-left: 10px;
+}
+
+.manage-payment-container button:last-of-type:hover {
+  background-color: #bbb;
+}
