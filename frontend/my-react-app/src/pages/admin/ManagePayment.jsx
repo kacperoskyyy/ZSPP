@@ -1,21 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 
-const ManagePayment = () => {
-  const { id } = useParams();
-  const [reservation, setReservation] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    fetch(`/api/reservations/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then(setReservation);
-  }, [id]);
-
+const ManagePayment = ({ reservation, onBack }) => {
   if (!reservation) return <p>Ładowanie...</p>;
 
   return (
