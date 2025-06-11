@@ -21,6 +21,7 @@ import models as _models
 # Uruchamianie aktualizacji wypożyczeń raz na dzień
 # -------------------------
 
+
 @asynccontextmanager
 async def lifespan(app: _fastapi.FastAPI):
     scheduler = AsyncIOScheduler()
@@ -55,7 +56,6 @@ if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
 
-
 # -------------------------
 # Publiczne endpointy
 # -------------------------
@@ -88,7 +88,8 @@ async def register(
     print(user)
     db_user = await _services.get_user_by_email(user.email, db)
     if db_user:
-        raise _fastapi.HTTPException(status_code=400, detail="Email already in use")
+        raise _fastapi.HTTPException(
+            status_code=400, detail="Email already in use")
 
     new_user = await _services.create_user(user, db)
     token = _auth.create_access_token(data={"sub": str(new_user.id)})
@@ -115,7 +116,8 @@ async def login(
 ):
     user = await _services.get_user_by_email(form_data.username, db)
     if not user or not user.verify_password(form_data.password):
-        raise _fastapi.HTTPException(status_code=400, detail="Invalid credentials")
+        raise _fastapi.HTTPException(
+            status_code=400, detail="Invalid credentials")
     token = _auth.create_access_token(data={"sub": str(user.id)})
 
     user_data = {
@@ -129,20 +131,22 @@ async def login(
     return {"access_token": token, "token_type": "bearer", "user": user_data}
 
 
-
 @app.post("/api/password-reset")
 async def request_password_reset(
         payload: _schemas.PasswordResetRequest,
         background_tasks: BackgroundTasks,
         db: _orm.Session = _fastapi.Depends(_services.get_db)
 ):
-    user = db.query(_models.User).filter(_models.User.email == payload.email).first()
+    user = db.query(_models.User).filter(
+        _models.User.email == payload.email).first()
     # Zawsze zwracamy tę samą wiadomość, aby nie ujawniać, czy konto istnieje.
     if user:
         token = secrets.token_hex(16)  # generujemy unikalny token
-        password_reset_tokens[token] = {"email": payload.email, "created_at": _dt.datetime.now()}
+        password_reset_tokens[token] = {
+            "email": payload.email, "created_at": _dt.datetime.now()}
         reset_link = f"http://localhost:3000/reset-password?token={token}"
-        background_tasks.add_task(_services.send_reset_email, payload.email, reset_link)
+        background_tasks.add_task(
+            _services.send_reset_email, payload.email, reset_link)
     return {"message": "Jeśli konto istnieje, wkrótce otrzymasz e-mail z instrukcjami resetu hasła."}
 
 
@@ -154,16 +158,19 @@ async def confirm_password_reset(
 ):
     token_data = password_reset_tokens.get(payload.token)
     if not token_data:
-        raise _fastapi.HTTPException(status_code=400, detail="Nieprawidłowy lub wygasły token.")
+        raise _fastapi.HTTPException(
+            status_code=400, detail="Nieprawidłowy lub wygasły token.")
 
     # Przyjmijmy, że token jest ważny 1 godzinę (3600 sekund)
     if (_dt.datetime.now() - token_data["created_at"]).total_seconds() > 3600:
         del password_reset_tokens[payload.token]
         raise _fastapi.HTTPException(status_code=400, detail="Token wygasł.")
 
-    user = db.query(_models.User).filter(_models.User.email == token_data["email"]).first()
+    user = db.query(_models.User).filter(
+        _models.User.email == token_data["email"]).first()
     if not user:
-        raise _fastapi.HTTPException(status_code=400, detail="Użytkownik nie istnieje.")
+        raise _fastapi.HTTPException(
+            status_code=400, detail="Użytkownik nie istnieje.")
 
     import passlib.hash as _hash
     user.password_hash = _hash.bcrypt.hash(payload.new_password)
@@ -198,7 +205,8 @@ async def get_specific_user(
 async def update_user(
         user_update: _schemas.UserUpdate,
         db: _orm.Session = _fastapi.Depends(_services.get_db),
-        current_user: _schemas.UserRead = _fastapi.Depends(_auth.get_current_user),
+        current_user: _schemas.UserRead = _fastapi.Depends(
+            _auth.get_current_user),
 ):
     updated_user = await _services.update_user(user_update, db, current_user)
     return {"detail": "User updated", "user": updated_user}
@@ -213,7 +221,8 @@ async def upload_profile_image(
     allowed_extensions = ['jpg', 'jpeg', 'png', 'gif']
     ext = file.filename.split(".")[-1].lower()
     if ext not in allowed_extensions:
-        raise _fastapi.HTTPException(status_code=400, detail="Invalid file extension")
+        raise _fastapi.HTTPException(
+            status_code=400, detail="Invalid file extension")
 
     file_name = f"user_{current_user.id}_{file.filename}"
     file_location = os.path.join(UPLOAD_DIR, file_name)
@@ -237,7 +246,8 @@ async def upload_profile_image(
 @app.post("/api/reservations", response_model=_schemas.ReservationRead)
 async def create_reservation(
         reservation: _schemas.ReservationCreate,
-        current_user: _schemas.UserRead = _fastapi.Depends(_auth.get_current_user),
+        current_user: _schemas.UserRead = _fastapi.Depends(
+            _auth.get_current_user),
         db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     return await _services.create_reservation(reservation, current_user.id, db)
@@ -246,7 +256,8 @@ async def create_reservation(
 @app.get("/api/reservations/{reservation_id}", response_model=_schemas.ReservationRead)
 async def get_reservation(
         reservation_id: int,
-        current_user: _schemas.UserRead = _fastapi.Depends(_auth.get_current_user),
+        current_user: _schemas.UserRead = _fastapi.Depends(
+            _auth.get_current_user),
         db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     return await _services.get_reservation(reservation_id, current_user.id, db)
@@ -254,10 +265,21 @@ async def get_reservation(
 
 @app.get("/api/reservations", response_model=List[_schemas.ReservationRead])
 async def get_all_user_reservations(
-        current_user: _schemas.UserRead = _fastapi.Depends(_auth.get_current_user),
+        current_user: _schemas.UserRead = _fastapi.Depends(
+            _auth.get_current_user),
         db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     return await _services.get_user_reservations(current_user.id, db)
+
+
+@app.delete("/api/reservations/{reservation_id}", status_code=204)
+async def delete_reservations(
+        reservation_id: int,
+        current_user: _schemas.UserRead = _fastapi.Depends(
+            _auth.get_current_user),
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+):
+    return await _services.delete_reservations(reservation_id, current_user.id, db)
 
 
 # -------------------------
@@ -351,7 +373,8 @@ async def create_ticket(
 # -------------------------
 @app.get("/api/employee/reservations", response_model=List[_schemas.ReservationRead])
 async def employee_get_reservations(
-        current_employee: _models.User = _fastapi.Depends(_auth.get_employee_user),
+        current_employee: _models.User = _fastapi.Depends(
+            _auth.get_employee_user),
         db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     return await _services.get_all_reservations(db)
@@ -359,7 +382,8 @@ async def employee_get_reservations(
 
 @app.get("/api/employee/support_tickets", response_model=List[_schemas.SupportTicketRead])
 async def employee_get_support_tickets(
-        current_employee: _models.User = _fastapi.Depends(_auth.get_employee_user),
+        current_employee: _models.User = _fastapi.Depends(
+            _auth.get_employee_user),
         db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     return await _services.get_all_tickets(db)
@@ -412,6 +436,7 @@ async def admin_create_location(
 ):
     return await _services.create_location(location, db)
 
+
 @app.get("/api/admin/locations/{location_id}", response_model=_schemas.LocationRead)
 async def admin_get_location(
         location_id: int,
@@ -463,6 +488,7 @@ async def admin_create_report(
 ):
     return await _services.create_report(report, db)
 
+
 @app.delete("/api/admin/locations/{location_id}")
 async def admin_delete_location(
         location_id: int,
@@ -470,6 +496,7 @@ async def admin_delete_location(
         db: _orm.Session = _fastapi.Depends(_services.get_db),
 ):
     return await _services.delete_location(location_id, db)
+
 
 @app.post("/api/admin/equipment/{equipment_id}/upload-image", response_model=_schemas.EquipmentImageRead)
 async def upload_equipment_image(
@@ -481,7 +508,8 @@ async def upload_equipment_image(
     allowed_extensions = ['jpg', 'jpeg', 'png', 'gif']
     ext = file.filename.split(".")[-1].lower()
     if ext not in allowed_extensions:
-        raise _fastapi.HTTPException(status_code=400, detail="Invalid file extension")
+        raise _fastapi.HTTPException(
+            status_code=400, detail="Invalid file extension")
 
     file_name = f"equipment_{equipment_id}_{file.filename}"
     file_location = os.path.join(UPLOAD_DIR, file_name)
@@ -491,7 +519,8 @@ async def upload_equipment_image(
 
     relative_path = os.path.join("uploads", file_name)
 
-    image_data = _schemas.EquipmentImageCreate(equipment_id=equipment_id, image_path=relative_path)
+    image_data = _schemas.EquipmentImageCreate(
+        equipment_id=equipment_id, image_path=relative_path)
     new_image = await _services.create_equipment_image(image_data, db)
 
     return _schemas.EquipmentImageRead.model_validate(new_image)

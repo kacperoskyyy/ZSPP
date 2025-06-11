@@ -82,6 +82,7 @@ def get_db():
     finally:
         db.close()
 
+
 def expire_reservations() -> None:
     db = _database.SessionLocal()
     try:
@@ -146,9 +147,11 @@ async def update_user(
 ):
     # Sprawdź uprawnienia
     if current_user.role != "admin" and user_update.id != current_user.id:
-        raise _fastapi.HTTPException(status_code=403, detail="Permission denied")
+        raise _fastapi.HTTPException(
+            status_code=403, detail="Permission denied")
 
-    user = db.query(_models.User).filter(_models.User.id == user_update.id).first()
+    user = db.query(_models.User).filter(
+        _models.User.id == user_update.id).first()
     if not user:
         raise _fastapi.HTTPException(status_code=404, detail="User not found")
 
@@ -199,6 +202,18 @@ async def get_all_reservations(db: _orm.Session):
     return db.query(_models.Reservation).all()
 
 
+async def delete_reservations(reservation_id: int, user_id: int, db: _orm.Session):
+    reservation = db.query(_models.Reservation).filter_by(
+        id=reservation_id, user_id=user_id).first()
+
+    if not reservation:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Rezerwacja nie znaleziona.")
+
+    db.delete(reservation)
+    db.commit()
+
+
 # --- CATEGORIES ---
 async def get_categories(db: _orm.Session):
     categories = db.query(_models.Category).all()
@@ -206,9 +221,11 @@ async def get_categories(db: _orm.Session):
 
 
 async def get_category_by_id(category_id: int, db: _orm.Session):
-    category = db.query(_models.Category).filter(_models.Category.id == category_id).first()
+    category = db.query(_models.Category).filter(
+        _models.Category.id == category_id).first()
     if not category:
-        raise _fastapi.HTTPException(status_code=404, detail="Category not found")
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Category not found")
     return _schemas.CategoryRead.model_validate(category)
 
 
@@ -227,9 +244,11 @@ async def create_category(category: _schemas.CategoryCreate, db: _orm.Session):
 
 
 async def delete_category(category_id: int, db: _orm.Session):
-    cat = db.query(_models.Category).filter(_models.Category.id == category_id).first()
+    cat = db.query(_models.Category).filter(
+        _models.Category.id == category_id).first()
     if not cat:
-        raise _fastapi.HTTPException(status_code=404, detail="Category not found")
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Category not found")
 
     db.delete(cat)
     db.commit()
@@ -253,9 +272,11 @@ async def create_equipment_image(image_data: _schemas.EquipmentImageCreate, db: 
 
 
 async def get_equipment(equipment_id: int, db: _orm.Session):
-    eq = db.query(_models.Equipment).filter(_models.Equipment.id == equipment_id).first()
+    eq = db.query(_models.Equipment).filter(
+        _models.Equipment.id == equipment_id).first()
     if not eq:
-        raise _fastapi.HTTPException(status_code=404, detail="Equipment not found")
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Equipment not found")
     return _schemas.EquipmentRead.model_validate(eq)
 
 
@@ -366,9 +387,11 @@ async def create_location(location_data: _schemas.LocationCreate, db: _orm.Sessi
 
 
 async def get_location(location_id: int, db: _orm.Session):
-    loc = db.query(_models.Location).filter(_models.Location.id == location_id).first()
+    loc = db.query(_models.Location).filter(
+        _models.Location.id == location_id).first()
     if not loc:
-        raise _fastapi.HTTPException(status_code=404, detail="Location not found")
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Location not found")
     return _schemas.LocationRead.model_validate(loc)
 
 
@@ -401,8 +424,10 @@ async def create_equipment_transport_item(item_data: _schemas.EquipmentTransport
     db.refresh(new_item)
     return _schemas.EquipmentTransportItemRead.from_orm(new_item)
 
+
 async def delete_location(location_id: int, db: _orm.Session):
-    location = db.query(_models.Location).filter(_models.Location.id == location_id).first()
+    location = db.query(_models.Location).filter(
+        _models.Location.id == location_id).first()
     if location:
         db.delete(location)
         db.commit()
