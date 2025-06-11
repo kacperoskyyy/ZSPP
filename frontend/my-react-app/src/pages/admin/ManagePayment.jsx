@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const ManagePayment = () => {
+const ManagePayment = (reservation, onBack) => {
   const { id } = useParams();
   const [reservation, setReservation] = useState(null);
 
@@ -24,8 +24,9 @@ const ManagePayment = () => {
       <p><strong>Użytkownik:</strong> {reservation.user_id}</p>
       <p><strong>Okres:</strong> {new Date(reservation.start_date).toLocaleDateString()} - {new Date(reservation.end_date).toLocaleDateString()}</p>
       <p><strong>Status:</strong> {reservation.status}</p>
-      {/* tutaj możesz dodać opcję "zatwierdzenia płatności" */}
+      {}
       <button onClick={() => alert("Płatność zatwierdzona!")}>Zatwierdź płatność</button>
+      <button onBack={onBack}>Powrót</button>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import ManagePayment from "./ManagePayment";
 
 const ManageReservations = () => {
   const [reservations, setReservations] = useState([]);
+  const [reservation, setReservation] =useStat([]);
   const [activeView, setActiveView] = useState("list");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -27,7 +28,7 @@ const ManageReservations = () => {
   }, []);
 
     const handleViewChange = (view, reservation) => {
-    setReservations(reservation);
+    setReservation(reservation);
     setActiveView(view);
   };
 
@@ -35,7 +36,7 @@ const ManageReservations = () => {
     setActiveView("list");
   };
 
-  if (activeView === "payments") return <ManagePayment onBack={showList} />;
+  if (activeView === "payments") return <ManagePayment onBack={showList} reservation={reservations} />;
 
   if (loading) return <p>Ładowanie rezerwacji…</p>;
   if (error) return <p style={{ color: "red" }}>Błąd: {error}</p>;
