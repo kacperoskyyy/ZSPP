@@ -1,5 +1,6 @@
 
 import React from "react";
+import {useNavigate} from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import "./Basket.css"; // Optional: create this file for styles
 
@@ -8,7 +9,8 @@ import "./Basket.css"; // Optional: create this file for styles
 const FREE_SHIPPING_THRESHOLD = 200;
 
 const Basket = () => {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, clearCart } = useCart();
+  const navigate = useNavigate();
 
   const totalValue = cartItems.reduce(
     (sum, item) => sum + item.price_per_day * item.quantity,
@@ -16,6 +18,46 @@ const Basket = () => {
   );
 
   const remaining = Math.max(FREE_SHIPPING_THRESHOLD - totalValue, 0);
+
+  const handleCreateReservation = async () => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      alert("Musisz być zalogowany, aby dokonać rezerwacji.");
+      return;
+    }
+
+    const startDate = new Date().toISOString();
+    const endDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(); 
+
+    try {
+      for(const item of cartItems) {
+        const reservationData = {
+          start_date: startDate,
+          end_date: endDate,
+        };
+
+        const response = await fetch("/api/reservations", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reservationData),
+        });
+        if (!response.ok) {
+          throw new Error("Błąd podczas tworzenia rezerwacji");
+        }
+      }
+
+      alert("Rezerwacja została pomyślnie utworzona!");
+      clearCart(); 
+      navigate("/user/reservations");
+    } catch (error) {
+      alert("Wystąpił błąd podczas tworzenia rezerwacji.");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="basket-page">
@@ -58,6 +100,15 @@ const Basket = () => {
           ))}
         </tbody>
       </table>
+
+      {cartItems.length > 0 && (
+        <div className="basket-actions">
+          <button onClick={handleCreateReservation} className="reservation-button">
+            Dodaj wypożyczenie
+          </button>
+        </div>
+      )}
+
     </div>
   );
 };
