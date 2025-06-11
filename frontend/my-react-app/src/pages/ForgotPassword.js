@@ -1,14 +1,19 @@
 // src/pages/ForgotPassword.js
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import FormContainer from "../components/FormContainer";
+import "./ForgotPassword.css";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     setStatusMessage("");
+    setLoading(true);
+
     try {
       const response = await fetch("/api/password-reset", {
         method: "POST",
@@ -19,46 +24,51 @@ const ForgotPassword = () => {
       setStatusMessage(data.message);
     } catch (error) {
       setStatusMessage("Wystąpił błąd podczas wysyłania żądania resetu hasła.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <FormContainer>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Resetuj hasło
-      </h2>
-      <form onSubmit={handleForgotPassword}>
-        <div style={{ marginBottom: "15px" }}>
-          <label htmlFor="email">Podaj swój adres e-mail:</label>
-          <input
-            type="email"
-            id="email"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+      <div className="forgot-password-container">
+        <h2 className="forgot-password-title">Resetuj hasło</h2>
+        
+        <form onSubmit={handleForgotPassword} className="forgot-password-form">
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
+              Podaj swój adres e-mail:
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="form-input"
+              placeholder="Wprowadź e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          
+          <button 
+            type="submit" 
+            className="submit-button"
+            disabled={loading}
+          >
+            {loading ? "Wysyłanie..." : "Wyślij link resetujący"}
+          </button>
+        </form>
+        
+        <div className="back-to-login">
+          <Link to="/login">Powróć do logowania</Link>
         </div>
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          Wyślij link resetujący
-        </button>
-      </form>
-      {statusMessage && (
-        <p style={{ marginTop: "15px", textAlign: "center" }}>
-          {statusMessage}
-        </p>
-      )}
+        
+        {statusMessage && (
+          <div className="status-message">
+            {statusMessage}
+          </div>
+        )}
+      </div>
     </FormContainer>
   );
 };
