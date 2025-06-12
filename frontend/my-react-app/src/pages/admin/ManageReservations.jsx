@@ -4,15 +4,16 @@ import ManagePayment from "./ManagePayment";
 
 const ManageReservations = () => {
   const [reservations, setReservations] = useState([]);
-  const [reservation, setReservation] =useState([]);
+  const [reservation, setReservation] = useState(null);
   const [activeView, setActiveView] = useState("list");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [shouldReload, setShouldReload] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchReservations = () => {
     const token = localStorage.getItem("access_token");
-
+    setLoading(true);
     fetch("/api/admin/reservations/all", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -25,19 +26,31 @@ const ManageReservations = () => {
       .then((data) => setReservations(data))
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchReservations();
   }, []);
 
-    const handleViewChange = (view, reservation) => {
+  useEffect(() => {
+    if (shouldReload) {
+      fetchReservations();
+      setShouldReload(false);
+    }
+  }, [shouldReload]);
+
+  const handleViewChange = (view, reservation) => {
     setReservation(reservation);
     setActiveView(view);
   };
 
   const showList = () => {
     setActiveView("list");
+    setShouldReload(true);
   };
 
-  if (activeView === "payments") return <ManagePayment onBack={showList} reservation={reservation} />;
-
+  if (activeView === "payments")
+    return <ManagePayment onBack={showList} reservation={reservation} />;
 
   if (loading) return <p>Ładowanie rezerwacji…</p>;
   if (error) return <p style={{ color: "red" }}>Błąd: {error}</p>;
@@ -66,7 +79,10 @@ const ManageReservations = () => {
               <td>{new Date(r.end_date).toLocaleDateString()}</td>
               <td>{r.status}</td>
               <td>
-                <button onClick={() => handleViewChange("payments", r)} className="reservation-button">
+                <button
+                  onClick={() => handleViewChange("payments", r)}
+                  className="reservation-button"
+                >
                   Podsumowanie
                 </button>
               </td>

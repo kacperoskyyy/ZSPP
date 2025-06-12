@@ -217,6 +217,19 @@ async def delete_reservations(reservation_id: int, user_id: int, db: _orm.Sessio
     db.delete(reservation)
     db.commit()
 
+async def end_reservation(reservation_id: int, db: _orm.Session):
+    reservation = db.query(_models.Reservation).filter_by(id=reservation_id).first()
+
+    if not reservation:
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Rezerwacja nie znaleziona.")
+
+    if reservation.status != "completed":
+        reservation.status = "completed"
+        db.commit()
+        db.refresh(reservation)
+
+    return reservation
 
 # --- CATEGORIES ---
 async def get_categories(db: _orm.Session):
@@ -239,11 +252,9 @@ async def create_category(category: _schemas.CategoryCreate, db: _orm.Session):
         description=category.description,
         image_path=category.image_path or "uploads/default_category.jpg"
     )
-    print(cat_obj)
     db.add(cat_obj)
     db.commit()
     db.refresh(cat_obj)
-    print(cat_obj)
     return cat_obj
 
 
@@ -465,7 +476,6 @@ async def create_equipment_transport(et_data: _schemas.EquipmentTransportCreate,
         current_location_id=et_data.current_location_id,
         destination_id=et_data.destination_id
     )
-    print("dupa")
     db.add(et)
     db.commit()
     db.refresh(et)

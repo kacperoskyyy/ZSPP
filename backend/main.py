@@ -471,6 +471,14 @@ async def admin_get_all_reservations(
 ):
     return await _services.get_all_reservations(db)
 
+@app.put("/api/admin/reservations/complete")
+async def admin_end_reservation(
+        reservation_id: int,
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        admin_user: _schemas.UserRead = _fastapi.Depends(_auth.get_admin_user),
+):
+    return await _services.end_reservation(reservation_id, db)
+
 
 @app.get("/api/admin/reports")
 async def admin_get_all_reports(
