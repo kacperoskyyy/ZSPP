@@ -367,10 +367,10 @@ async def create_ticket(ticket_data: _schemas.SupportTicketCreate, db: _orm.Sess
 
 # --- ADMIN REPORTS ---
 async def get_all_reports(db: _orm.Session):
-    reports = db.query(_models.AdminReport).all()
+    reports = db.query(_models.AdminReport).order_by(_models.AdminReport.created_at.desc()).all()
     return [_schemas.AdminReportRead.model_validate(r) for r in reports]
 
-async def generate_report(reportType: str, db: _orm.Session):
+async def generate_report(reportType: str, db: _orm.Session, admin_user: _schemas.UserRead):
 
     if reportType == "location_summary":
         data = (
@@ -419,11 +419,30 @@ async def generate_report(reportType: str, db: _orm.Session):
     labels, values = zip(*data) if data else ([], [])
     chart = _generate_chart(title, labels, values)
 
+    now = _dt.datetime.now()
+    report = _models.AdminReport(
+        admin_id=admin_user.id,
+        report_type=reportType,
+        title=title,
+        start_date=now,
+        end_date=now,
+        content=title  # można dodać więcej danych do content w przyszłości
+    )
+    db.add(report)
+    db.commit()
+    db.refresh(report)
+
     return {
-        "type": reportType,
+        "id": report.id,
         "title": title,
         "chart": f"data:image/png;base64,{chart}"
     }
+
+    # return {
+    #     "type": reportType,
+    #     "title": title,
+    #     "chart": f"data:image/png;base64,{chart}"
+    # }
 
 async def create_report(report_data: _schemas.AdminReportCreate, db: _orm.Session):
     new_report = _models.AdminReport(

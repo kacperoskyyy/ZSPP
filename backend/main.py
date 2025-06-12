@@ -17,6 +17,7 @@ import schemas as _schemas
 import auth as _auth
 import models as _models
 
+
 # -------------------------
 # Uruchamianie aktualizacji wypożyczeń raz na dzień
 # -------------------------
@@ -33,6 +34,7 @@ async def lifespan(app: _fastapi.FastAPI):
 
     yield
     scheduler.shutdown()
+
 
 app = _fastapi.FastAPI(lifespan=lifespan)
 
@@ -471,6 +473,7 @@ async def admin_get_all_reservations(
 ):
     return await _services.get_all_reservations(db)
 
+
 @app.put("/api/admin/reservations/complete")
 async def admin_end_reservation(
         reservation_id: int,
@@ -496,13 +499,15 @@ async def admin_create_report(
 ):
     return await _services.create_report(report, db)
 
+
 @app.get("/api/admin/generate-report/{reportType}")
 async def admin_generate_report(
         reportType: str,
         admin_user: _schemas.UserRead = _fastapi.Depends(_auth.get_admin_user),
         db: _orm.Session = _fastapi.Depends(_services.get_db)
 ):
-    return await _services.generate_report(reportType, db)
+    return await _services.generate_report(reportType, db, admin_user)
+
 
 @app.delete("/api/admin/locations/{location_id}")
 async def admin_delete_location(
@@ -539,6 +544,7 @@ async def upload_equipment_image(
     new_image = await _services.create_equipment_image(image_data, db)
 
     return _schemas.EquipmentImageRead.model_validate(new_image)
+
 
 if __name__ == "__main__":
     import uvicorn
